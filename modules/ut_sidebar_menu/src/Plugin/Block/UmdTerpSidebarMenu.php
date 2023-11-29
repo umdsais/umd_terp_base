@@ -2,6 +2,7 @@
 
 namespace Drupal\ut_sidebar_menu\Plugin\Block;
 
+use Drupal\system\Entity\Menu;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\NestedArray;
@@ -15,7 +16,6 @@ use Drupal\Component\Utility\NestedArray;
  * )
  */
 class UmdTerpSidebarMenu extends BlockBase {
-
   /**
    * {@inheritdoc}
    */
@@ -24,11 +24,19 @@ class UmdTerpSidebarMenu extends BlockBase {
 
     $form = parent::blockForm($form, $form_state);
 
+    // Load all menus
+    $menus = Menu::loadMultiple();
+
+    // Build options array
+    $options = [];
+    foreach ($menus as $menu_id => $menu) {
+        $options[$menu_id] = $menu->label();
+    }
     $form['menu_name'] = [
       '#type' => 'select',
       '#title' => t('Menu'),
       '#default_value' => $config['menu_name'],
-      '#options' => loadMultiple(),
+      '#options' => $options,
       '#description' => t('The menus available to place links in for this content type.'),
     ];
 
