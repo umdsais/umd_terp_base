@@ -3,7 +3,7 @@
     "type": "drupal-module",
     "description": "UMD Terp Base is the base module for all UMD drupal 8 projects.",
     "keywords": ["Drupal"],
-    "homepage": "https://github.com/UMD-Digital/umd_terp_base",
+    "homepage": "https://github.com/umdsais/umd_terp_base",
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "authors": [
@@ -32,7 +32,7 @@
         "drupal/webform": "^6.2@beta"
     },
     "support": {
-        "issues": "https://github.com/UMD-Digital/umd_terp_base/issues",
-        "source": "https://github.com/UMD-Digital/umd_terp_base/"
+        "issues": "https://github.com/umdsais/umd_terp_base/issues",
+        "source": "https://github.com/umdsais/umd_terp_base/"
     }
 }
