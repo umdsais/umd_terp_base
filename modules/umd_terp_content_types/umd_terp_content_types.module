@@ -5,6 +5,7 @@
  * Module file for umd_content_types module.
  */
 
+use Drupal\node\Entity;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -152,22 +153,25 @@ function _umd_terp_content_types_get_people() {
     return $cache->data;
   }
   else {
-    $storage = Drupal::getContainer()->get('entity_type.manager')->getStorage('node');
-    $nids = $storage->accessCheck(TRUE);
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $nids = $storage;
     // Gather published artist nodes and sort by title. Get only people tagged as "Article Authors", to cut down on excess.
-    $nids = $nids->condition('type', 'umd_terp_person')
+    $nids = $nids->getQuery()
+      ->condition('type', 'umd_terp_person')
       ->condition('status', 1)
       ->condition('field_umdt_ct_person_author_stat', TRUE)
       ->sort('title')
+      ->accessCheck(TRUE)
       ->execute();
     $result = $storage->loadMultiple($nids);
+    return $result;
     // Set cache.
-    if ($result) {
-      \Drupal::cache()->set('umd_terp_content_types__people', $result, time() + 7200);
-      return $result;
-    }
-    else {
-      return NULL;
-    }
-  }
+   if ($result) {
+     \Drupal::cache()->set('umd_terp_content_types__people', $result, time() + 7200);
+     return $result;
+   }
+   else {
+     return NULL;
+   }
+ }
 }
