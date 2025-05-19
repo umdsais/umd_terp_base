@@ -1,3 +1,7 @@
+11.0.1
+======
+- Add a conflict for contrib drupal/external_data_source so that we can ensure it pulls correct version from umd_trerp_base
+
 11.0.0
 ======
 - Updated for D11 compatibility

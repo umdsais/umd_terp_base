@@ -34,7 +34,8 @@
         "drupal/core": "^11.0"
     },
     "conflict": {
-        "drupal/core": "<11.0"
+        "drupal/core": "<11.0",
+        "drupal/external_data_source": "*"
     },
     "support": {
         "issues": "https://github.com/umdsais/umd_terp_base/issues",
