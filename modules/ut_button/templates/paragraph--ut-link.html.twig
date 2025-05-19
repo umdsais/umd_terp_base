@@ -5,12 +5,13 @@
  */
 #}
 
-{%
-  set classes = [
-    'fancy-link'
-  ]
-%}
+{% set brightness = 'light' %}
 
 {% if content.field_ut_link_link.0 %}
-	{% include directory ~ '/templates/helpers/link.html.twig' with {'link': content.field_ut_link_link.0, 'classes': classes|join(' ') } %}
+    {% set link = content.field_ut_link_link.0 %}
+		<umd-element-call-to-action slot="actions" data-display="secondary" data-visual-size="standard" data-theme="{{ brightness }}">
+			<a href="{{ link['#url'] }}" target="{{ link['#options'].attributes.target|default('_self') }}">
+				{{ link['#title'] }}
+			</a>
+		</umd-element-call-to-action>
 {% endif %}

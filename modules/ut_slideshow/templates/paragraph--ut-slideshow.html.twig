@@ -12,28 +12,22 @@
   ]
 %}
 
+{% set style = paragraph.field_ut_slideshow_style.value %}
+
+{% if style == 'slideshow-bg-default' %}
+	{% set brightness = ''%}
+{% else %}
+	{% set brightness = 'dark'%}
+{% endif %}
+
 {% block paragraph %}
+
 	<div{{attributes.addClass(classes).setAttribute('id','umd_terp_paragraph--'~paragraph.id())}} aria-live="polite">
 		{% block content %}
-			<div class="slideshow-nav">
-				<button class="slideshow-nav-control slideshow-control-prev" aria-label="Previous slide">
-					<span class="icon icon-chevron-right" aria-hidden="true"></span>
-					<span class="sr-only">Previous slide</span>
-				</button>
-				<span>
-					<span class="slideshow-nav-current-index">1</span>
-					of
-					{{ ut_slideshow_length }}</span>
-				<button class="slideshow-nav-control slideshow-control-next" aria-label="Next slide">
-					<span class="icon icon-chevron-right" aria-hidden="true"></span>
-					<span class="sr-only">Next slide</span>
-				</button>
-			</div>
-			<div class="slideshow">
+			<umd-element-carousel-image resize="" data-theme="{{ brightness }}">
 				{{ content.field_ut_slideshow_items|field_value }}
-			</div>
+			</umd-element-carousel-image>
 		{% endblock %}
 		{{ content|without('field_ut_slideshow_items', 'field_ut_slideshow_style') }}
 	</div>
 {% endblock paragraph %}
-

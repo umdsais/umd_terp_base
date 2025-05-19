@@ -2,6 +2,12 @@
 
 /**
  * @file
+ */
+
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * @file
  * Umd_terp_content_types module install file.
  */
 
@@ -38,4 +44,132 @@ function umd_terp_content_types_update_8004() {
  */
 function umd_terp_content_types_update_8005() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'umd_terp_content_types');
+}
+
+/**
+ * Remove old fields for UMD Design Library Update.
+ */
+function umd_terp_content_types_update_8006() {
+  // Remove old field.
+  if (FieldConfig::loadByName('node', 'umd_terp_homepage', 'field_umdt_ct_hero_dark') !== NULL) {
+    FieldConfig::loadByName('node', 'umd_terp_homepage', 'field_umdt_ct_hero_dark')->delete();
+  }
+
+}
+
+/**
+ * Make image field on events required, as the new UMD Design system requires it.
+ */
+function umd_terp_content_types_update_8007() {
+
+  $database = \Drupal::database();
+  $transaction = $database->startTransaction();
+
+  try {
+    $field_config = FieldConfig::loadByName('node', 'umd_terp_event', 'field_umdt_ct_event_image');
+
+    if (!$field_config) {
+      return;
+    }
+
+    // Update the field configuration.
+    $field_config->setRequired(TRUE);
+    $field_config->save();
+
+    // Update form display settings.
+    $form_display = \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->load('node.umd_terp_event.default');
+
+    if ($form_display) {
+      $component = $form_display->getComponent('field_umdt_ct_event_image');
+      if ($component) {
+        $component['required'] = TRUE;
+        $form_display->setComponent('field_umdt_ct_event_image', $component);
+        $form_display->save();
+      }
+    }
+
+    // Update view display settings.
+    $view_display = \Drupal::entityTypeManager()
+      ->getStorage('entity_view_display')
+      ->load('node.umd_terp_event.default');
+
+    if ($view_display) {
+      $component = $view_display->getComponent('field_umdt_ct_event_image');
+      if ($component) {
+        $view_display->setComponent('field_umdt_ct_event_image', $component + ['required' => TRUE]);
+        $view_display->save();
+      }
+    }
+
+    $messages[] = [
+      'message' => t('Successfully updated field @field_name to be required.', ['@field_name' => $field_config->getLabel()]),
+      'error' => FALSE,
+    ];
+
+  }
+  catch (\Exception $e) {
+    $transaction->rollBack();
+    throw new \RuntimeException($e->getMessage());
+  }
+
+  return $messages;
+
+}
+
+/**
+ * Make image field on events display for teasers.
+ */
+function umd_terp_content_types_update_8008() {
+  $database = \Drupal::database();
+  $transaction = $database->startTransaction();
+
+  try {
+    // Enable teaser view mode.
+    $entity_type_manager = \Drupal::entityTypeManager();
+
+    // Configure the view display.
+    $view_display = $entity_type_manager
+      ->getStorage('entity_view_display')
+      ->load('node.umd_terp_event.teaser');
+
+    if (!$view_display) {
+      $view_display = $entity_type_manager
+        ->getStorage('entity_view_display')
+        ->create([
+          'targetEntityType' => 'node',
+          'bundle' => 'umd_terp_event',
+          'mode' => 'teaser',
+          'status' => TRUE,
+        ]);
+    }
+
+    // Configure the media field component.
+    $component_settings = [
+      'type' => 'entity_reference_entity_view',
+      'label' => 'hidden',
+      'settings' => [
+        'view_mode' => 'default',
+        'link' => 'false',
+      ],
+      'label_display' => 'hidden',
+      'third_party_settings' => [],
+    ];
+
+    $view_display->setComponent('field_umdt_ct_event_image', $component_settings);
+    $view_display->save();
+
+    $messages[] = [
+      'message' => t('Successfully configured teaser display for media field.'),
+      'error' => FALSE,
+    ];
+
+  }
+  catch (\Exception $e) {
+    $transaction->rollBack();
+    throw new \RuntimeException($e->getMessage());
+  }
+
+  return $messages;
 }

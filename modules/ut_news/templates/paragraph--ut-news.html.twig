@@ -5,70 +5,58 @@
  */
 #}
 
-{%
-  set classes = [
-    'card-group-bg',
-    paragraph.field_ut_news_style.value ? paragraph.field_ut_news_style.value|clean_class,
-  ]
-%}
-
 {% block paragraph %}
-	<div{{attributes.addClass(classes).setAttribute('id','umd_terp_paragraph--'~paragraph.id())}}>
-		{% block content %}
-			{% if content.field_ut_news_title|field_value %}
-				<h2 class="widget-heading h3">{{ content.field_ut_news_title|field_value }}</h2>
-			{% else %}
-				<h2 class="widget-heading h3">News</h2>
-			{% endif %}
-			{% if ut_news_list[0] %}
-				<div class="card-group">
-					{% for news in ut_news_list %}
-						{% set photo = assets_path ~ '/img/Profiles_Photo_Placeholder.svg' %}
-						{% set photo_alt = news.title %}
-						{% if news.articlesHeroImage.0 %}
-							{% set photo = news.articlesHeroImage.0.url %}
-							{% if not ((photo starts with 'http://') or (photo starts with 'https://')) %}
-								{% set photo = 'https://today.umd.edu/' ~ photo %}
-							{% endif %}
-							{% set photo_alt = news.articlesHeroImage.0.altText %}
-						{% endif %}
-						<div class="card-wrap card-wrap--3">
-							<div class="card">
-								<div class="card-img card-img-top">
-									<img src="{{ photo }}" alt="{{ photo_alt }}">
-								</div>
-								<div class="card-body">
-									{% if news.title %}
-										<h2 class="card-title">{{ news.title|raw }}</h2>
-									{% endif %}
-									{% if news.summary %}
-										<div class="card-text">{{ news.summary|raw }}</div>
-									{% endif %}
-									{% if news.url %}
-										{% apply spaceless %}
-											<a href="{{news.url}}" class="card-cta fancy-link">
-												View Article
-												<span class="sr-only">{{ news.title|raw }}</span>
-											</a>
-										{% endapply %}
-									{% endif %}
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			{% else %}
-				<div class="text-center">
-					<p>Sorry, no news articles available.</p>
-				</div>
-			{% endif %}
-			<div class="text-center mt-4">
-				{% if content.field_ut_news_link.0 %}
-					{% include directory ~ '/templates/helpers/link.html.twig' with {'link': content.field_ut_news_link.0, 'classes': 'card-group-cta fancy-link' } %}
-				{% endif %}
-			</div>
-		{% endblock %}
-		{{ content|without('field_ut_news_audience', 'field_ut_news_colleges_schools', 'field_ut_news_priorities', 'field_ut_news_messaging_area', 'field_ut_news_style', 'field_ut_news_title', 'field_ut_news_topics', 'field_ut_news_link') }}
-	</div>
-{% endblock paragraph %}
+  <div{{attributes.setAttribute('id','umd_terp_paragraph--'~paragraph.id())}}>
+    {% block content %}
+      {% if content.field_ut_news_title|field_value %}
+        <h2 class="widget-heading h3">{{ content.field_ut_news_title|field_value }}</h2>
+      {% else %}
+        <h2 class="widget-heading h3">News</h2>
+      {% endif %}
 
+      {% if ut_news_list[0] %}
+        <div class="umd-layout-grid-gap-three">
+          {% for news in ut_news_list %}
+
+            <umd-element-card theme="light" border="true" aligned="true">
+
+              {% set photo_alt = news.title %}
+              {% if news.articlesHeroImage.0 %}
+                {% set photo = news.articlesHeroImage.0.url %}
+                {% if not ((photo starts with 'http://') or (photo starts with 'https://')) %}
+                  {% set photo = 'https://today.umd.edu/' ~ photo %}
+                {% endif %}
+                {% set photo_alt = news.articlesHeroImage.0.altText %}
+                <a slot="image" href="{{ news.url }}" target="_blank">
+                  <img src="{{ photo }}" alt="{{ photo_alt }}"/>
+                </a>
+              {% endif %}
+              <div slot="eyebrow">{{ news.postDate|date("F j, Y") }}</div>
+              <h2 slot="headline">{{ news.title|raw }}</h2>
+              <div slot="text">
+                {{ news.summary|raw }}
+              </div>
+              <umd-element-call-to-action slot="actions" data-display="secondary" data-visual-size="" data-theme="light">
+                <a href="{{ news.url }}" target="_self">
+                  View Article
+                  <span class="sr-only">{{ news.title|raw }}</span>
+                </a>
+              </umd-element-call-to-action>
+            </umd-element-card>
+
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center">
+          <p>Sorry, no news articles available.</p>
+        </div>
+      {% endif %}
+      <div class="text-center mt-4">
+        {% if content.field_ut_news_link.0 %}
+          {% include directory ~ '/templates/helpers/link.html.twig' with {'link': content.field_ut_news_link.0, 'classes': 'card-group-cta fancy-link' } %}
+        {% endif %}
+      </div>
+    {% endblock %}
+
+  </div>
+{% endblock paragraph %}

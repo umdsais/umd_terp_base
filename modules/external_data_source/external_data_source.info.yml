@@ -1,0 +1,7 @@
+name: 'UMD: External Data Source'
+type: module
+description: 'Modified, custom version of the External Data Source contrib module. Provides field Fromatters for news and events feeds'
+package: UMD.EDU
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:field

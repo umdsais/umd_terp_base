@@ -8,7 +8,7 @@ dependencies:
   module:
     - entity_reference_revisions
 _core:
-  default_config_hash: GtSYBihAjgqOIV7xl8jYtYG1hQox8bC5J8gDKNO5zgw
+  default_config_hash: jElf3u1sovFVBiUK52U4X4xdJPnSVBz0EUmgEarFs_s
 id: paragraph.ut_carousel.field_ut_carousel_items
 field_name: field_ut_carousel_items
 entity_type: paragraph
@@ -22,13 +22,10 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       ut_carousel_item: ut_carousel_item
+    negate: 0
     target_bundles_drag_drop:
-      ut_carousel_item:
-        enabled: true
-        weight: 25
       ut_accordion:
         weight: 26
         enabled: false
@@ -50,6 +47,9 @@ settings:
       ut_carousel:
         weight: 32
         enabled: false
+      ut_carousel_item:
+        weight: 25
+        enabled: true
       ut_divider:
         weight: 33
         enabled: false

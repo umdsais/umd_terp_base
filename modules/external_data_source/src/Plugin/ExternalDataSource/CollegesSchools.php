@@ -1,28 +1,28 @@
 <?php
 
-namespace Drupal\umd_terp_base\Plugin\ExternalDataSource;
+namespace Drupal\external_data_source\Plugin\ExternalDataSource;
 
 use Drupal\external_data_source\Plugin\ExternalDataSourceBase;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\umd_terp_base\UmdTerpBase;
 
 /**
- * Provides a 'Events Campus Units' ExternalDataSource.
+ * Provides a 'Colleges and Schools' ExternalDataSource.
  *
  * @ExternalDataSource(
- *   id = "events_campus_units",
- *   name = @Translation("Events Campus Units"),
- *   description = @Translation("This Plugin will gather a list of UMD Calendar Event Campus Units terms.")
+ *   id = "colleges_schools",
+ *   name = @Translation("Colleges and Schools"),
+ *   description = @Translation("This Plugin will gather a list of UMD Colleges and Schools.")
  * )
  */
-class EventsCampusUnits extends ExternalDataSourceBase {
+class CollegesSchools extends ExternalDataSourceBase {
 
   /**
    *
    * @return string
    */
   public function getPluginId() {
-    return 'events_campus_units';
+    return 'colleges_schools';
   }
 
   /**
@@ -30,7 +30,7 @@ class EventsCampusUnits extends ExternalDataSourceBase {
    * @return string
    */
   public function getPluginDefinition() {
-    return $this->t('This Plugin will gather a list of UMD Calendar Event Campus Unit terms.');
+    return $this->t('This Plugin will gather a list of UMD Colleges and Schools.');
   }
 
   /**
@@ -60,7 +60,7 @@ class EventsCampusUnits extends ExternalDataSourceBase {
    * @return array
    */
   public function getResponse() {
-    $data = UmdTerpBase::middleware_get_events_taxonomy('campusUnits');
+    $data = UmdTerpBase::middleware_get_news_taxonomy('campusUnits');
     return $this->formatResponse($data);
   }
 

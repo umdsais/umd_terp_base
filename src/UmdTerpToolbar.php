@@ -23,13 +23,13 @@ class UmdTerpToolbar {
   /**
    * Local task manager.
    *
-   * @var Drupal\Core\Menu\LocalTaskManagerInterface
+   * @var \Drupal\Core\Menu\LocalTaskManagerInterface
    */
   private $localTaskManager;
   /**
    * Local route match.
    *
-   * @var Drupal\Core\Routing\ResettableStackedRouteMatchInterface
+   * @var \Drupal\Core\Routing\ResettableStackedRouteMatchInterface
    */
   private $routeMatch;
   /**

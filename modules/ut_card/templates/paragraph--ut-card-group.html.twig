@@ -6,17 +6,27 @@
 #}
 
 {%
-  set classes = [
-    'card-group-bg',
-    paragraph.field_ut_card_group_style.value ? paragraph.field_ut_card_group_style.value|clean_class,
-  ]
+  set columns = paragraph.field_ut_card_group_columns.value
 %}
+{% if columns == '2' %}
+  {% set col_class = 'umd-layout-grid-gap-two'%}
+
+{% elseif columns == '3' %}
+  {% set col_class = 'umd-layout-grid-gap-three'%}
+
+{% elseif columns == '4' %}
+  {% set col_class = 'umd-layout-grid-gap-four'%}
+{% else %}
+  {% set col_class = 'umd-layout-grid-gap-three'%}
+
+{% endif %}
 
 {% block paragraph %}
-	<div{{attributes.addClass(classes).setAttribute('id','umd_terp_paragraph--'~paragraph.id())}}>
-		{% block content %}
-			{{ content.field_ut_card_group_cards }}
-		{% endblock %}
-		{{ content|without('field_ut_card_group_cards', 'field_ut_card_group_style', 'field_ut_card_group_columns') }}
-	</div>
+  <div{{attributes.setAttribute('id','umd_terp_paragraph--'~paragraph.id())}}>
+    {% block content %}
+      <div class="{{ col_class }}">
+        {{ content.field_ut_card_group_cards }}
+      </div>
+    {% endblock %}
+  </div>
 {% endblock paragraph %}

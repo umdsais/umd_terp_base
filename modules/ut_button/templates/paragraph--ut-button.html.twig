@@ -5,13 +5,23 @@
  */
 #}
 
-{%
-  set classes = [
-    'btn',
-    paragraph.field_ut_button_style.value ? paragraph.field_ut_button_style.value|clean_class,
-  ]
-%}
+{% set style = paragraph.field_ut_button_style.value %}
+
+{% if style == 'btn-primary' %}
+  {% set type = 'primary' %}
+{% elseif style == 'btn-secondary' %}
+  {% set type = 'outline' %}
+{% else %}
+  {% set type = 'outline' %}
+{% endif %}
+
+{% set brightness = 'light' %}
 
 {% if content.field_ut_button_link.0 %}
-	{% include directory ~ '/templates/helpers/link.html.twig' with {'link': content.field_ut_button_link.0, 'classes': classes|join(' ') } %}
+    {% set link = content.field_ut_button_link.0 %}
+		<umd-element-call-to-action slot="actions" data-display="{{ type }}" data-visual-size="standard" data-theme="{{ brightness }}">
+			<a href="{{ link['#url'] }}" target="{{ link['#options'].attributes.target|default('_self') }}">
+				{{ link['#title'] }}
+			</a>
+		</umd-element-call-to-action>
 {% endif %}

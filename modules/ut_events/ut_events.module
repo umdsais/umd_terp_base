@@ -13,14 +13,14 @@ use Drupal\umd_terp_base\UmdTerpBase;
  *
  * @inheritdoc
  */
-function ut_events_help($route_name, RouteMatchInterface $route_match)
-{
+function ut_events_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.ut_events':
       $text = file_get_contents(dirname(__FILE__) . "/README.md");
       if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
         return '<pre>' . $text . '</pre>';
-      } else {
+      }
+      else {
         // Use the Markdown filter to render the README.
         $filter_manager = \Drupal::service('plugin.manager.filter');
         $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
@@ -37,8 +37,7 @@ function ut_events_help($route_name, RouteMatchInterface $route_match)
  *
  *   This sets variables for getting events, and then gets events, and displays.
  */
-function ut_events_preprocess_paragraph__ut_events(&$variables)
-{
+function ut_events_preprocess_paragraph__ut_events(&$variables) {
 
   // UUID to pass for cache.
   $uuid = $variables['elements']['#paragraph']->uuid->value;
@@ -69,10 +68,9 @@ function ut_events_preprocess_paragraph__ut_events(&$variables)
 
   // Check on Count.
   $count = 3;
-  if (isset($variables['elements']['#paragraph']->field_ut_events_count->value)) {
-    $count = $variables['elements']['#paragraph']->field_ut_events_count->value;
-  }
-
+  // If (isset($variables['elements']['#paragraph']->field_ut_events_count->value)) {
+  //  $count = $variables['elements']['#paragraph']->field_ut_events_count->value;
+  // }
   // Get events.
   $variables['ut_events_list'] = _ut_events_get_events(
     $location_type,
@@ -89,8 +87,7 @@ function ut_events_preprocess_paragraph__ut_events(&$variables)
  *
  * Lets us define our paragraphs templates in this module.
  */
-function ut_events_theme($existing, $type, $theme, $path)
-{
+function ut_events_theme($existing, $type, $theme, $path) {
   return [
     'paragraph__ut_events' => [
       'base hook' => 'paragraph',
@@ -103,8 +100,7 @@ function ut_events_theme($existing, $type, $theme, $path)
  *
  * Adds "Content Tips" helper text to the paragraph.
  */
-function ut_events_field_widget_paragraphs_form_alter(&$element, &$form_state, $context)
-{
+function ut_events_field_widget_paragraphs_form_alter(&$element, &$form_state, $context) {
   if ($element['#paragraph_type'] == 'ut_events') {
     // Tips text.
     $markup = '<ul>';
@@ -130,10 +126,8 @@ function ut_events_field_widget_paragraphs_form_alter(&$element, &$form_state, $
 
 /**
  * Formats multiple filters to send to the graphql endpoint.
- *
  */
-function _ut_events_format_filters($filter)
-{
+function _ut_events_format_filters($filter) {
   $result = '';
   foreach ($filter as $key => $value) {
     $result = intval($filter[$key]['value']);
@@ -156,7 +150,8 @@ function _ut_events_get_events(
 ) {
   if ($cache = \Drupal::cache()->get('ut_events--' . $id)) {
     return $cache->data;
-  } else {
+  }
+  else {
     $fields = 'id title slug url allDay multiDay startDate endDate ... on communications_Event { id summary: commonRichTextTwo description: commonRichText image: commonAssetHeroImageSingle { url } } ... on submission_Event { id summary: commonRichTextTwo description: commonRichText image: commonAssetHeroImageSingle { url ... on placeholders_Asset { id altText:alt } ... on heroImages_Asset { id altText:commonPlainTextTwo }}}';
     $query = 'getEvents{solspace_calendar{events(limit:' . $range . ',loadOccurrences: true,rangeStart:\\"today\\"';
     if ($location_type !== NULL || $campus_location !== NULL || $campus_unit !== NULL || $tags !== NULL) {
@@ -182,7 +177,8 @@ function _ut_events_get_events(
       $result = $result['data']['solspace_calendar']['events'];
       \Drupal::cache()->set('ut_events--' . $id, $result, time() + 900);
       return $result;
-    } else {
+    }
+    else {
       return NULL;
     }
   }

@@ -4,6 +4,7 @@
  * @file
  * Ut_News module install file.
  */
+
 use Drupal\field\Entity\FieldConfig;
 
 /**
@@ -26,10 +27,23 @@ function ut_news_update_8002() {
 function ut_news_update_8003() {
 
   // Deleting destination field.
-  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_news_destination') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_news_destination') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_news_destination')->delete();
   }
 
   \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_news');
 }
 
+/**
+ * Remove old filter fields for UMD Design Library Update.
+ */
+function ut_news_update_8004() {
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_news', 'field_ut_news_style') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_news', 'field_ut_news_style')->delete();
+  }
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_news', 'field_ut_news_link') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_news', 'field_ut_news_link')->delete();
+  }
+}

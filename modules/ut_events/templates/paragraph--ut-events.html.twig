@@ -5,69 +5,51 @@
  */
 #}
 
-{%
-  set classes = [
-    'events-bg',
-    paragraph.field_ut_events_style.value ? paragraph.field_ut_events_style.value|clean_class,
-  ]
-%}
-
 {% block paragraph %}
-	<div{{attributes.addClass(classes).setAttribute('id','umd_terp_paragraph--'~paragraph.id())}}>
+  <div{{attributes.setAttribute('id','umd_terp_paragraph--'~paragraph.id())}}>
 
-		{% block content %}
-			{% if content.field_ut_events_title|field_value %}
-				<h2 class="widget-heading h3">{{ content.field_ut_events_title|field_value }}</h2>
-			{% else %}
-				<h2 class="widget-heading h3">Events</h2>
-			{% endif %}
-			{% if ut_events_list[0] %}
-				<div class="events">
-					{% for evnt in ut_events_list %}
-						<div class="event-wrap">
-							<div class="event card">
-								<div class="event-body">
-									{% if evnt.multiDay %}
-										<div class="event-date">Multi Day</div>
-									{% else %}
-										<div class="event-date">{{ evnt.startDate|date("F j, Y") }}</div>
-									{% endif %}
-									<h3 class="event-title">{{ evnt.title|raw }}</h3>
-									<div class="event-time-location">
-										{% if evnt.multiDay %}
-											<span>{{ evnt.startDate|date("F j, Y") }}
-												-
-												{{ evnt.endDate|date("F j, Y") }}</span>
-										{% else %}
-											{% if evnt.allDay %}
-												<span>All Day</span>
-											{% else %}
-												<span>{{ evnt.startDate|date("g:i a") }}
-													-
-													{{ evnt.endDate|date("g:i a") }}</span>
-											{% endif %}
-										{% endif %}
-									</div>
-									<a href="https://calendar.umd.edu/{{ evnt.slug }}" class="card-cta event-cta btn">View Event
-										<span class="sr-only">{{ evnt.title|raw }}</span>
-									</a>
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			{% else %}
-				<div class="text-center">
-					<p>Sorry, no upcoming UMD events available.</p>
-				</div>
-			{% endif %}
-			<div class="text-center">
-				{% if content.field_ut_events_link.0 %}
-					{% include directory ~ '/templates/helpers/link.html.twig' with {'link': content.field_ut_events_link.0, 'classes': 'events-calendar-cta fancy-link' } %}
-				{% endif %}
-			</div>
-			{{ content|without('field_ut_events_campus_location', 'field_ut_events_count', 'field_ut_events_campus_units', 'field_ut_events_location_type', 'field_ut_events_tags', 'field_ut_events_style', 'field_ut_events_title', 'field_ut_events_link') }}
-		{% endblock %}
+    {% block content %}
+      {% if content.field_ut_events_title|field_value %}
+        <h2 class="widget-heading h3">{{ content.field_ut_events_title|field_value }}</h2>
+      {% else %}
+        <h2 class="widget-heading h3">Events</h2>
+      {% endif %}
 
-	</div>
+      {# <umd-feed-events row-count="1" lazyload="true" token="{{ ut_events_api_token }}"></umd-feed-events> #}
+
+      {% if ut_events_list[0] %}
+
+        <div class="umd-layout-grid-gap-three">
+          {% for evnt in ut_events_list %}
+
+            <umd-element-event show-time="false" display="">
+              <img slot="image" src="{{ evnt.image[0].url }}" alt="{{ evnt.image[0].altText }}"/>
+
+              <h2 slot="headline">{{ evnt.title|raw }}</h2>
+
+              <div slot="text">
+                {{ evnt.summary|raw }}
+              </div>
+
+              <div slot="start-date-iso">{{ evnt.startDate|date("F j, Y") }}</div>
+              <div slot="end-date-iso">{{ evnt.endDate|date("F j, Y") }}</div>
+
+              <umd-element-call-to-action slot="actions" data-display="secondary" data-visual-size="" data-theme="light">
+                <a href="{{ evnt.url }}" target="_self">
+                  View Event
+                  <span class="sr-only">{{ evnt.title|raw }}</span>
+                </a>
+              </umd-element-call-to-action>
+            </umd-element-event>
+
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center">
+          <p>Sorry, no upcoming UMD events available.</p>
+        </div>
+      {% endif %}
+    {% endblock %}
+
+  </div>
 {% endblock paragraph %}

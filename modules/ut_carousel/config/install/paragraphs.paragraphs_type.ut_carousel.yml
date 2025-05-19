@@ -2,10 +2,9 @@ langcode: en
 status: true
 dependencies: {  }
 _core:
-  default_config_hash: dHNp6tQOUYHEcrbXgK0taCKX83eUUmFC7bQxCz3dm4o
+  default_config_hash: 9iJiee1yU0SQJAFovLFvBJwhEImM3DZA1z7l36LjMvA
 id: ut_carousel
 label: Carousel
 icon_uuid: null
-icon_default: null
 description: 'Provides a paragraphs bundle for embedding a carousel as a Kitchen Sink Widget.'
 behavior_plugins: {  }

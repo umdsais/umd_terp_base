@@ -1,3 +1,10 @@
+11.0.0
+======
+- Updated for D11 compatibility
+- updated to use UMD Design Library for multiple components
+- right sidebar option removed
+- external data source module moved from contrib, to be a submodule of umd_terp_base. Composer dependencies on contrib version removed, cache clears should simply find module in new location when updates run.
+
 8.1.67
 ======
 - Add if statement around module functionality to avoid breakage in some subthemes

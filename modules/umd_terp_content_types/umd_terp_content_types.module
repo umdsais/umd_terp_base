@@ -5,7 +5,6 @@
  * Module file for umd_content_types module.
  */
 
-use Drupal\node\Entity;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -59,7 +58,7 @@ function umd_terp_content_types_preprocess_node(&$variables) {
       // See if the articles path was overwritten in theme settings.
       $articles_url = '/articles';
       $articles_theme_url = theme_get_setting('umd_terp_articles_path');
-      if($articles_theme_url !== '') {
+      if ($articles_theme_url !== '') {
         $articles_url = $articles_theme_url;
       }
       if (!empty($categories)) {
@@ -128,7 +127,7 @@ function _umd_terp_content_types_format_term_links(&$terms, $link) {
       $tid = $item['target_id'];
       $term = Term::load($tid);
       $adj_link = NULL;
-      if($link !== NULL) {
+      if ($link !== NULL) {
         $adj_link = $link . $tid;
       }
       $cat = [
@@ -166,12 +165,12 @@ function _umd_terp_content_types_get_people() {
     $result = $storage->loadMultiple($nids);
     return $result;
     // Set cache.
-   if ($result) {
-     \Drupal::cache()->set('umd_terp_content_types__people', $result, time() + 7200);
-     return $result;
-   }
-   else {
-     return NULL;
-   }
- }
+    if ($result) {
+      \Drupal::cache()->set('umd_terp_content_types__people', $result, time() + 7200);
+      return $result;
+    }
+    else {
+      return NULL;
+    }
+  }
 }

@@ -5,12 +5,12 @@
  * Ut_feature module install file.
  */
 
-use \Drupal\field\Entity\FieldStorageConfig;
-use \Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
 
 /**
-  * Change field_ut_feature_text field from string (plain text) to text(formatted).
-  */
+ * Change field_ut_feature_text field from string (plain text) to text(formatted).
+ */
 function ut_feature_update_8001() {
 
   $fields = [
@@ -47,7 +47,7 @@ function ut_feature_update_8001() {
     }
 
     // Save new field configs & delete existing fields.
-    $new_fields = array();
+    $new_fields = [];
     foreach ($field_storage->getBundles() as $bundle => $label) {
       $field = FieldConfig::loadByName($entity_type, $bundle, $field_name);
       $new_field = $field->toArray();
@@ -96,4 +96,19 @@ function ut_feature_update_8001() {
  */
 function ut_feature_update_8002() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_feature');
+}
+
+/**
+ * Remove old fields for UMD Design Library Update.
+ */
+function ut_feature_update_8003() {
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_feature', 'field_ut_feature_color') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_feature', 'field_ut_feature_color')->delete();
+  }
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_feature', 'field_ut_feature_style') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_feature', 'field_ut_feature_style')->delete();
+  }
+
 }

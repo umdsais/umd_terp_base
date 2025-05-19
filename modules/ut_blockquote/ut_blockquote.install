@@ -2,6 +2,12 @@
 
 /**
  * @file
+ */
+
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * @file
  * Ut_blockquote module install file.
  */
 
@@ -10,4 +16,15 @@
  */
 function ut_blockquote_update_8001() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_blockquote');
+}
+
+/**
+ * Remove old fields for UMD Design Library Update.
+ */
+function ut_blockquote_update_8002() {
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_blockquote', 'field_ut_blockquote_style') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_blockquote', 'field_ut_blockquote_style')->delete();
+  }
+
 }

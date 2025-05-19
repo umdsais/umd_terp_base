@@ -5,28 +5,13 @@
  */
 #}
 
-{%
-  set classes = [
-    'stat-group-bg',
-    paragraph.field_ut_stat_group_style.value ? paragraph.field_ut_stat_group_style.value|clean_class,
-  ]
-%}
-
 {% block paragraph %}
-	<div{{attributes.addClass(classes).setAttribute('id','umd_terp_paragraph--'~paragraph.id())}} aria-live="polite">
-		{% block content %}
-			{{ content.field_ut_stat_group_stats }}
-			<div class="stat-group-nav">
-				<button class="stat-group-nav-button stat-group-nav-prev" aria-label="View previous stat">
-					<span class="sr-only">View previous stat</span>
-					<span class="icon icon-chevron-right" aria-hidden="true"></span>
-				</button>
-				<button class="stat-group-nav-button stat-group-nav-next" aria-label="View next stat">
-					<span class="sr-only">View next stat</span>
-					<span class="icon icon-chevron-right" aria-hidden="true"></span>
-				</button>
-			</div>
-		{% endblock %}
-		{{ content|without('field_ut_stat_group_stats', 'field_ut_stat_group_style') }}
-	</div>
+  <div{{attributes.setAttribute('id','umd_terp_paragraph--'~paragraph.id())}} aria-live="polite">
+    {% block content %}
+      <div class="umd-layout-grid-gap-two">
+        {{ content.field_ut_stat_group_stats }}
+      </div>
+    {% endblock %}
+    {{ content|without('field_ut_stat_group_stats') }}
+  </div>
 {% endblock paragraph %}

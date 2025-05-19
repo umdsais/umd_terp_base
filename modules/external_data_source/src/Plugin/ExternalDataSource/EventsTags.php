@@ -1,28 +1,28 @@
 <?php
 
-namespace Drupal\umd_terp_base\Plugin\ExternalDataSource;
+namespace Drupal\external_data_source\Plugin\ExternalDataSource;
 
 use Drupal\external_data_source\Plugin\ExternalDataSourceBase;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\umd_terp_base\UmdTerpBase;
 
 /**
- * Provides a 'Priorities and Initiatives' ExternalDataSource.
+ * Provides a 'Events Tags' ExternalDataSource.
  *
  * @ExternalDataSource(
- *   id = "priorities_initiatives",
- *   name = @Translation("Priorities and Initiatives"),
- *   description = @Translation("This Plugin will gather a list of UMD Priorities and Initiatives.")
+ *   id = "events_tags",
+ *   name = @Translation("Events Tags"),
+ *   description = @Translation("This Plugin will gather a list of UMD Calendar Event Tags terms.")
  * )
  */
-class PrioritiesInitiatives extends ExternalDataSourceBase {
+class EventsTags extends ExternalDataSourceBase {
 
   /**
    *
    * @return string
    */
   public function getPluginId() {
-    return 'priorities_initiatives';
+    return 'events_tags';
   }
 
   /**
@@ -30,7 +30,7 @@ class PrioritiesInitiatives extends ExternalDataSourceBase {
    * @return string
    */
   public function getPluginDefinition() {
-    return $this->t('This Plugin will gather a list of UMD Priorities and Initiatives.');
+    return $this->t('This Plugin will gather a list of UMD Calendar Event Tags terms.');
   }
 
   /**
@@ -60,7 +60,7 @@ class PrioritiesInitiatives extends ExternalDataSourceBase {
    * @return array
    */
   public function getResponse() {
-    $data = UmdTerpBase::middleware_get_news_taxonomy('prioritiesAndInitiatives');
+    $data = UmdTerpBase::middleware_get_events_taxonomy('tags');
     return $this->formatResponse($data);
   }
 

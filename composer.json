@@ -1,25 +1,26 @@
 {
     "name": "umd_digital/umd_terp_base",
     "type": "drupal-module",
-    "description": "UMD Terp Base is the base module for all UMD drupal 8 projects.",
-    "keywords": ["Drupal"],
+    "description": "UMD Terp Base is the base module for all UMD drupal projects.",
+    "keywords": [
+        "Drupal", "UMD.EDU"
+    ],
     "homepage": "https://github.com/umdsais/umd_terp_base",
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "authors": [
         {
-            "name": "Anthony Neumann",
-            "homepage": "https://www.drupal.org/u/agn507",
+            "name": "idfive",
+            "homepage": "https://idfive.com",
             "role": "Maintainer"
-        },
-        {
-            "name": "Dan Rogers",
-            "homepage": "https://www.drupal.org/u/dan_rogers",
+          },
+          {
+            "name": "UMD DIT",
+            "homepage": "https://it.umd.edu/",
             "role": "Maintainer"
-        }
+          }
     ],
     "require": {
-        "drupal/external_data_source": "*",
         "drupal/admin_toolbar": "*",
         "drupal/link_attributes": "*",
         "drupal/paragraphs": "*",
@@ -29,7 +30,11 @@
         "drupal/search_api": "*",
         "drupal/tablefield": "*",
         "drupal/viewsreference": "^2.0@beta",
-        "drupal/webform": "^6.2@beta"
+        "drupal/webform": "^6.2@beta",
+        "drupal/core": "^11.0"
+    },
+    "conflict": {
+        "drupal/core": "<11.0"
     },
     "support": {
         "issues": "https://github.com/umdsais/umd_terp_base/issues",

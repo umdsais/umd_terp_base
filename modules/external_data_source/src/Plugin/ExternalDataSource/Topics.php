@@ -1,28 +1,28 @@
 <?php
 
-namespace Drupal\umd_terp_base\Plugin\ExternalDataSource;
+namespace Drupal\external_data_source\Plugin\ExternalDataSource;
 
 use Drupal\external_data_source\Plugin\ExternalDataSourceBase;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\umd_terp_base\UmdTerpBase;
 
 /**
- * Provides a 'Events Location Type' ExternalDataSource.
+ * Provides a 'Topics' ExternalDataSource.
  *
  * @ExternalDataSource(
- *   id = "events_location_type",
- *   name = @Translation("Events Location Type"),
- *   description = @Translation("This Plugin will gather a list of UMD Calendar Event Location Type terms.")
+ *   id = "topics",
+ *   name = @Translation("Topics"),
+ *   description = @Translation("This Plugin will gather a list of UMD Topics.")
  * )
  */
-class EventsLocationType extends ExternalDataSourceBase {
+class Topics extends ExternalDataSourceBase {
 
   /**
    *
    * @return string
    */
   public function getPluginId() {
-    return 'events_location_type';
+    return 'topics';
   }
 
   /**
@@ -30,7 +30,7 @@ class EventsLocationType extends ExternalDataSourceBase {
    * @return string
    */
   public function getPluginDefinition() {
-    return $this->t('This Plugin will gather a list of UMD Calendar Event Location Type terms.');
+    return $this->t('This Plugin will gather a list of UMD Topics.');
   }
 
   /**
@@ -60,7 +60,7 @@ class EventsLocationType extends ExternalDataSourceBase {
    * @return array
    */
   public function getResponse() {
-    $data = UmdTerpBase::middleware_get_events_taxonomy('locationType');
+    $data = UmdTerpBase::middleware_get_news_taxonomy('tags');
     return $this->formatResponse($data);
   }
 

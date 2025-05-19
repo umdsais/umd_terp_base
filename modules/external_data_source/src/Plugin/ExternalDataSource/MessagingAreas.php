@@ -1,28 +1,28 @@
 <?php
 
-namespace Drupal\umd_terp_base\Plugin\ExternalDataSource;
+namespace Drupal\external_data_source\Plugin\ExternalDataSource;
 
 use Drupal\external_data_source\Plugin\ExternalDataSourceBase;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\umd_terp_base\UmdTerpBase;
 
 /**
- * Provides a 'Colleges and Schools' ExternalDataSource.
+ * Provides a 'Messaging Areas' ExternalDataSource.
  *
  * @ExternalDataSource(
- *   id = "colleges_schools",
- *   name = @Translation("Colleges and Schools"),
- *   description = @Translation("This Plugin will gather a list of UMD Colleges and Schools.")
+ *   id = "messaging_reas",
+ *   name = @Translation("Messaging Areas"),
+ *   description = @Translation("This Plugin will gather a list of UMD Messaging Areas.")
  * )
  */
-class CollegesSchools extends ExternalDataSourceBase {
+class MessagingAreas extends ExternalDataSourceBase {
 
   /**
    *
    * @return string
    */
   public function getPluginId() {
-    return 'colleges_schools';
+    return 'messaging_areas';
   }
 
   /**
@@ -30,7 +30,7 @@ class CollegesSchools extends ExternalDataSourceBase {
    * @return string
    */
   public function getPluginDefinition() {
-    return $this->t('This Plugin will gather a list of UMD Colleges and Schools.');
+    return $this->t('This Plugin will gather a list of UMD Messaging Areas.');
   }
 
   /**
@@ -60,7 +60,7 @@ class CollegesSchools extends ExternalDataSourceBase {
    * @return array
    */
   public function getResponse() {
-    $data = UmdTerpBase::middleware_get_news_taxonomy('campusUnits');
+    $data = UmdTerpBase::middleware_get_news_taxonomy('messagingAreas');
     return $this->formatResponse($data);
   }
 

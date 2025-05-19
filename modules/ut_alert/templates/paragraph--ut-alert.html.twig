@@ -5,16 +5,25 @@
  */
 #}
 
-<div class="alert" role="alert">
+<umd-element-alert-page data-visual-icon="true">
 	{% if content.field_ut_alert_title|field_value %}
-		<h3 class="alert-heading">{{ content.field_ut_alert_title }}</h3>
+		<h2 slot="headline">
+			<a href="/" aria-label="Learn more about {{ content.field_ut_alert_title }}">
+				{{ content.field_ut_alert_title }}
+			</a>
+		</h2>
 	{% endif %}
-	<div class="alert-content">
-		{% if content.field_ut_alert_text|field_value %}
+	{% if content.field_ut_alert_text|field_value %}
+		<div slot="text" class="editor-content">
 			{{ content.field_ut_alert_text }}
-		{% endif %}
-		{% if content.field_ut_alert_link.0 %}
-			{% include directory ~ '/templates/helpers/link.html.twig' with {'link': content.field_ut_alert_link.0, 'classes': 'alert-cta btn' } %}
-		{% endif %}
-	</div>
-</div>
+		</div>
+	{% endif %}
+	{% if content.field_ut_alert_link.0 %}
+		{% set link = content.field_ut_alert_link.0 %}
+		<umd-element-call-to-action slot="actions" data-display="primary" data-visual-size="" data-theme="light">
+			<a href="{{ link['#url'] }}" target="{{ link['#options'].attributes.target|default('_self') }}">
+				{{ link['#title'] }}
+			</a>
+		</umd-element-call-to-action>
+	{% endif %}
+</umd-element-alert-page>

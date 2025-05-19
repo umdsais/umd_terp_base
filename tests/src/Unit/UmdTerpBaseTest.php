@@ -1,5 +1,7 @@
 <?php
+
 namespace Drupal\Tests\umd_terp_base\Unit;
+
 use Drupal\Tests\UnitTestCase;
 use Drupal\umd_terp_base\UmdTerpBase;
 
@@ -11,6 +13,7 @@ use Drupal\umd_terp_base\UmdTerpBase;
 class UmdTerpBaseTest extends UnitTestCase {
 
   protected $umdterpbase;
+
   /**
    * Before a test method is run, setUp() is invoked.
    * Create new umdterpbase object.
@@ -28,7 +31,7 @@ class UmdTerpBaseTest extends UnitTestCase {
     $query .= ' ) { data { title slug all_day start_date { formatted_short time } end_date { time } campus_location { name } }}';
     $data = $this->umdterpbase->middleware_get_news($query);
     $this->assertArrayHasKey('data', $data);
-    $this->assertEquals(3,count($data['data']['adv_events']['data']));
+    $this->assertEquals(3, count($data['data']['adv_events']['data']));
   }
 
   /**
@@ -37,7 +40,7 @@ class UmdTerpBaseTest extends UnitTestCase {
   public function testMiddlewareGetTaxonomy() {
     $data = $this->umdterpbase->middleware_get_taxonomy('audience');
     $this->assertArrayHasKey('data', $data);
-    $this->assertGreaterThanOrEqual(1,count($data['data']));
+    $this->assertGreaterThanOrEqual(1, count($data['data']));
   }
 
   /**

@@ -4,6 +4,7 @@
  * @file
  * Ut_feature module install file.
  */
+
 use Drupal\field\Entity\FieldConfig;
 
 /**
@@ -18,14 +19,21 @@ function ut_carousel_update_8001() {
  */
 function ut_carousel_update_8002() {
   // Deleting fields no longer desired.
-  if (FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_caption') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_caption') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_caption')->delete();
   }
-  if (FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_text') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_text') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_text')->delete();
   }
-  if (FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_title') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_title') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_carousel_item', 'field_ut_carousel_item_title')->delete();
   }
+  \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_carousel');
+}
+
+/**
+ * Add caption field.
+ */
+function ut_carousel_update_8003() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_carousel');
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\umd_terp_base;
 
 use GuzzleHttp\Client;
@@ -7,15 +8,12 @@ use Drupal\Component\Serialization\Json;
 /**
  * Defines a UmdTerpBase class.
  */
-class UmdTerpBase
-{
+class UmdTerpBase {
 
   /**
-   *
    * Gets taxonomies/term ID's/etc from UMD Today for News.
    */
-  public static function middleware_get_news($query)
-  {
+  public static function middleware_get_news($query) {
     $umd_terp_base_settings = \Drupal::config('umd_terp_base.settings');
     $news_api_bearer_token = $umd_terp_base_settings->get('umd_terp_base.news_api_token');
     if (!empty($news_api_bearer_token)) {
@@ -29,7 +27,8 @@ class UmdTerpBase
       ]);
       $result = Json::decode($response->getBody());
       return $result;
-    } else {
+    }
+    else {
       $message = 'Please set or check the UMD Today News API Bearer token on the UMD Terp modules configuration page.';
       \Drupal::logger('umd_terp_base')->alert($message);
       \Drupal::messenger()->addError($message);
@@ -39,11 +38,9 @@ class UmdTerpBase
   }
 
   /**
-   *
    * Gets taxonomies/term ID's/etc from UMD Calendar for Events.
    */
-  public static function middleware_get_events($query)
-  {
+  public static function middleware_get_events($query) {
     $umd_terp_base_settings = \Drupal::config('umd_terp_base.settings');
     $calendar_api_bearer_token = $umd_terp_base_settings->get('umd_terp_base.calendar_api_token');
     if (!empty($calendar_api_bearer_token)) {
@@ -57,7 +54,8 @@ class UmdTerpBase
       ]);
       $result = Json::decode($response->getBody());
       return $result;
-    } else {
+    }
+    else {
       $message = 'Please set or check the UMD Today Calendar API Bearer token on the UMD Terp modules configuration page.';
       \Drupal::logger('umd_terp_base')->alert($message);
       \Drupal::messenger()->addError($message);
@@ -71,8 +69,7 @@ class UmdTerpBase
    *
    * Flatten the response and be sure all are string.
    */
-  public static function middleware_format_taxonomy($response)
-  {
+  public static function middleware_format_taxonomy($response) {
     $collection = [];
     foreach ($response['data']['categories'] as $entry) {
       $collection[] = [
@@ -88,8 +85,7 @@ class UmdTerpBase
    *
    * Define the query for getting news taxonomy terms.
    */
-  public static function middleware_get_news_taxonomy($taxonomy)
-  {
+  public static function middleware_get_news_taxonomy($taxonomy) {
     $query = 'getCategoriesByType { categories(group: \\"' . $taxonomy . '\\") { title id }}';
     return self::middleware_get_news($query);
   }
@@ -99,8 +95,7 @@ class UmdTerpBase
    *
    * Define the query for getting events taxonomy terms.
    */
-  public static function middleware_get_events_taxonomy($taxonomy)
-  {
+  public static function middleware_get_events_taxonomy($taxonomy) {
     $query = 'getCategoriesByType { categories(group: \\"' . $taxonomy . '\\") { title id }}';
     return self::middleware_get_events($query);
   }

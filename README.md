@@ -1,13 +1,15 @@
 # About UMD Terp Base Module
 
-UMD Terp Base is the base module for all UMD drupal 8 projects. It is designed to be installed along with the [UMD Terp Theme](https://github.com/UMD-Digital/umd_terp). This module provides a suite of modules, functions, and configuration to make that theme work as designed.
+UMD Terp Base is the base module for all UMD drupal projects. It is designed to be installed along with the [UMD Terp Theme](https://github.com/umdsais/umd_terp). This module provides a suite of modules, functions, and configuration to make that theme work as designed.
 
-- [UMD Terp Theme](https://github.com/UMD-Digital/umd_terp)
-- [UMD Terp Base Module](https://github.com/UMD-Digital/umd_terp_base)
+This theme is currently a mix of an older UMD Drupal specific frontend, and the [UMD Design System](https://playground.designsystem.umd.edu/?path=/story/introduction-welcome--welcome&singleStory=false). 
+
+- [UMD Terp Theme](https://github.com/umdsais/umd_terp)
+- [UMD Terp Base Module](https://github.com/umdsais/umd_terp_base)
 
 ## Installation
 
-Install as you normally would any drupal 8 module.
+Install as you normally would any drupal module.
 
 ### Via Composer:
 
@@ -27,6 +29,9 @@ Install as you normally would any drupal 8 module.
 
 ### Sub Modules
 
+See readme files of individual modules for more information.
+
+- external_data_source: A customized module, based on an older, unsupported contrib module. Allows some KS widgets to interact with terms and content from UMD News, and Events platforms.
 - umd_terp_content_types: Provides various customizations and configurations for content types used in the "UMD Terp" theme. This is installed by default when enabling umd_terp_base.
 - ut_accordion: Paragraphs integration of accordions for UMD projects. This module provides a way to add an accordion to Kitchen Sink Pages.
 - ut_blockquote: Paragraphs integration of blockquote for UMD projects. This module provides a way to add a blockquote to Kitchen Sink Pages.
@@ -58,14 +63,15 @@ Semantic tagging must take place in github for the updates to be able to be pull
 
 - Minor versions (non breaking changes): 8.1.1, 8.1.2, etc.
 - Major versions (breaking changes): 8.2.0, 8.3.0, etc.
+- Core versions (based on if modules updated for specific drupal core): 9.0.0, 10.0.0, etc.
 
 ### Core (base) module issues, patches, etc
 
-All edits, requests, etc should be submitted to the github repo for the [UMD Terp Base Module](https://github.com/UMD-Digital/umd_terp_base). Please add issues to the [issues queue](https://github.com/UMD-Digital/umd_terp_base/issues). Patches will be reviewed on a merit and resources available basis.
+All edits, requests, etc should be submitted to the github repo for the [UMD Terp Base Module](https://github.com/umdsais/umd_terp_base). Please add issues to the [issues queue](https://github.com/umdsais/umd_terp_base/issues). Patches will be reviewed on a merit and resources available basis.
 
 ### Frontend
 
-All CSS, JS, etc are based in the [UMD Terp Theme](https://github.com/UMD-Digital/umd_terp). This module contains no frontend styles for any widgets/etc.
+All CSS, JS, etc are based in the [UMD Terp Theme](https://github.com/umdsais/umd_terp). This module contains no frontend styles for any widgets/etc.
 
 ### Customization
 

@@ -4,6 +4,7 @@
  * @file
  * Ut_events module install file.
  */
+
 use Drupal\field\Entity\FieldConfig;
 
 /**
@@ -32,29 +33,28 @@ function ut_events_update_8003() {
  */
 function ut_events_update_8004() {
 
-
   // Deleting schools field.
-  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_colleges_schools') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_colleges_schools') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_colleges_schools')->delete();
   }
 
   // Deleting destination field.
-  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_destination') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_destination') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_destination')->delete();
   }
 
   // Deleting type field.
-  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_event_types') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_event_types') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_event_types')->delete();
   }
 
   // Deleting messaging areas field.
-  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_messaging_area') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_messaging_area') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_messaging_area')->delete();
   }
 
   // Deleting priorities field.
-  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_priorities') !== NULL ) {
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_priorities') !== NULL) {
     FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_priorities')->delete();
   }
 
@@ -67,4 +67,22 @@ function ut_events_update_8004() {
  */
 function ut_events_update_8005() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_events');
+}
+
+/**
+ * Remove old filter fields for UMD Design Library Update.
+ */
+function ut_events_update_8006() {
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_count') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_count')->delete();
+  }
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_style') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_style')->delete();
+  }
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_link') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_link')->delete();
+  }
 }

@@ -2,6 +2,12 @@
 
 /**
  * @file
+ */
+
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * @file
  * Ut_stats module install file.
  */
 
@@ -17,4 +23,20 @@ function ut_stats_update_8001() {
  */
 function ut_stats_update_8002() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_stats');
+}
+
+/**
+ * Remove old fields for UMD Design Library Update.
+ */
+function ut_stats_update_8003() {
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_stat', 'field_ut_stat_image') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_stat', 'field_ut_stat_image')->delete();
+  }
+
+  // Remove old field.
+  if (FieldConfig::loadByName('paragraph', 'ut_stat_group', 'field_ut_stat_group_style') !== NULL) {
+    FieldConfig::loadByName('paragraph', 'ut_stat_group', 'field_ut_stat_group_style')->delete();
+  }
+
 }

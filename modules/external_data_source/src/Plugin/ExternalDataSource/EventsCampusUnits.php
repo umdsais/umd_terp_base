@@ -1,28 +1,28 @@
 <?php
 
-namespace Drupal\umd_terp_base\Plugin\ExternalDataSource;
+namespace Drupal\external_data_source\Plugin\ExternalDataSource;
 
 use Drupal\external_data_source\Plugin\ExternalDataSourceBase;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\umd_terp_base\UmdTerpBase;
 
 /**
- * Provides a 'Messaging Areas' ExternalDataSource.
+ * Provides a 'Events Campus Units' ExternalDataSource.
  *
  * @ExternalDataSource(
- *   id = "messaging_reas",
- *   name = @Translation("Messaging Areas"),
- *   description = @Translation("This Plugin will gather a list of UMD Messaging Areas.")
+ *   id = "events_campus_units",
+ *   name = @Translation("Events Campus Units"),
+ *   description = @Translation("This Plugin will gather a list of UMD Calendar Event Campus Units terms.")
  * )
  */
-class MessagingAreas extends ExternalDataSourceBase {
+class EventsCampusUnits extends ExternalDataSourceBase {
 
   /**
    *
    * @return string
    */
   public function getPluginId() {
-    return 'messaging_areas';
+    return 'events_campus_units';
   }
 
   /**
@@ -30,7 +30,7 @@ class MessagingAreas extends ExternalDataSourceBase {
    * @return string
    */
   public function getPluginDefinition() {
-    return $this->t('This Plugin will gather a list of UMD Messaging Areas.');
+    return $this->t('This Plugin will gather a list of UMD Calendar Event Campus Unit terms.');
   }
 
   /**
@@ -60,7 +60,7 @@ class MessagingAreas extends ExternalDataSourceBase {
    * @return array
    */
   public function getResponse() {
-    $data = UmdTerpBase::middleware_get_news_taxonomy('messagingAreas');
+    $data = UmdTerpBase::middleware_get_events_taxonomy('campusUnits');
     return $this->formatResponse($data);
   }
 

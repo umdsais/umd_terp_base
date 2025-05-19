@@ -8,22 +8,19 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * {@inheritdoc}
  */
-class UmdTerpBaseConfigForm extends ConfigFormBase
-{
+class UmdTerpBaseConfigForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId()
-  {
+  public function getFormId() {
     return 'umd_terp_base_config_form';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state)
-  {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
     $config = $this->config('umd_terp_base.settings');
     $form['help_text'] = [
@@ -60,8 +57,7 @@ class UmdTerpBaseConfigForm extends ConfigFormBase
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state)
-  {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('umd_terp_base.settings');
     $config->set('umd_terp_base.news_api_token', $form_state->getValue('news_api_token'));
     $config->set('umd_terp_base.calendar_api_token', $form_state->getValue('calendar_api_token'));
@@ -73,8 +69,7 @@ class UmdTerpBaseConfigForm extends ConfigFormBase
   /**
    * {@inheritdoc}
    */
-  protected function getEditableConfigNames()
-  {
+  protected function getEditableConfigNames() {
     return [
       'umd_terp_base.settings',
     ];
