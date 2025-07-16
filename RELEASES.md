@@ -1,3 +1,10 @@
+11.0.2
+======
+- Documentation improvements across all modules
+- Added robust PHPDoc and Markdown docs
+- Security and performance review completed
+- Confirmed no unused files/folders
+
 11.0.1
 ======
 - Add a conflict for contrib drupal/external_data_source so that we can ensure it pulls correct version from umd_trerp_base
