@@ -1,8 +1,13 @@
 <?php
-
 /**
  * @file
- * Ut_sidebar module file.
+ * Sidebar Menu module for displaying sidebar navigation blocks and menus.
+ *
+ * Provides help and theme hooks for sidebar menu and block templates.
+ *
+ * Implements:
+ *   - hook_help(): Displays module help and README.
+ *   - hook_theme(): Registers menu and block templates.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;

@@ -8,51 +8,72 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
 
 /**
- * An edit toolbar button service.
+ * Provides an edit toolbar button service for Drupal entity pages.
+ *
+ * This service determines if an edit button should be displayed in the admin toolbar
+ * for canonical entity routes (nodes and taxonomy terms) and generates the appropriate
+ * render array for the toolbar. It interacts with Drupal's local task system to find
+ * available edit routes and builds toolbar menu items accordingly.
+ *
+ * Usage:
+ *   $toolbar = \Drupal::service('umd_terp_base.toolbar');
+ *   $edit_button = $toolbar->addEdit();
+ *
+ * @package Drupal\umd_terp_base
  */
 class UmdTerpToolbar {
 
   use StringTranslationTrait;
 
   /**
-   * Local links array.
+   * Stores local task links for the current route.
    *
    * @var array
    */
   private $localLinks = [];
+
   /**
-   * Local task manager.
+   * Local task manager service.
    *
    * @var \Drupal\Core\Menu\LocalTaskManagerInterface
    */
   private $localTaskManager;
+
   /**
-   * Local route match.
+   * Route match service.
    *
    * @var \Drupal\Core\Routing\ResettableStackedRouteMatchInterface
    */
   private $routeMatch;
+
   /**
-   * Toolbar menu items.
+   * Stores toolbar menu items to be rendered.
    *
    * @var array
    */
   private $toolbarMenuItems = [];
+
   /**
-   * Current local tasks.
+   * Stores the current local tasks for the route.
    *
    * @var array
    */
   private $currentLocalTasks;
+
   /**
-   * Current route.
+   * Stores the current route name.
    *
    * @var array
    */
   private $currentRoute;
 
   /**
-   * Injecting some services here.
+   * Constructs the UmdTerpToolbar service.
+   *
+   * @param \Drupal\Core\Menu\LocalTaskManagerInterface $localTaskManager
+   *   The local task manager service.
+   * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $routeMatch
+   *   The route match service.
    */
   public function __construct(LocalTaskManagerInterface $localTaskManager, ResettableStackedRouteMatchInterface $routeMatch) {
     $this->localTaskManager = $localTaskManager;
@@ -62,10 +83,12 @@ class UmdTerpToolbar {
   }
 
   /**
-   * The adding of the edit button.
+   * Adds an edit button to the toolbar if the current route is an entity canonical route.
+   *
+   * @return array
+   *   A render array for the toolbar edit button, or an empty array if not applicable.
    */
   public function addEdit() {
-
     if (!empty($this->currentLocalTasks)) {
       if (in_array(
         $this->currentRoute,
@@ -76,24 +99,25 @@ class UmdTerpToolbar {
             'entity.node.edit_form'
           );
         }
-        if ($this->localTaskExists('entity.taxonomy_term.edit_form')) {
+        elseif ($this->localTaskExists('entity.taxonomy_term.edit_form')) {
           $this->toolbarMenuItems['toolbar_edit'] = $this->renderableButton(
             'entity.taxonomy_term.edit_form'
           );
         }
       }
-      else {
-        $this->toolbarMenuItems['toolbar_edit'] = $this->renderableButtonDummy();
-      }
     }
-    else {
-      $this->toolbarMenuItems['toolbar_edit'] = $this->renderableButtonDummy();
-    }
-    return $this->toolbarMenuItems;
+    // Only return toolbarMenuItems if a real button was added.
+    return !empty($this->toolbarMenuItems) ? $this->toolbarMenuItems : [];
   }
 
   /**
-   * The renderable array for the edit button.
+   * Builds a render array for the edit button for the given route.
+   *
+   * @param string $route
+   *   The route name for the edit form.
+   *
+   * @return array
+   *   A render array for the toolbar edit button.
    */
   private function renderableButton($route) {
     $content = $this->localLinks[$route];
@@ -128,31 +152,7 @@ class UmdTerpToolbar {
   }
 
   /**
-   * The dummy renderable button for caching reasons.
-   */
-  private function renderableButtonDummy() {
-    return [
-      '#type' => 'toolbar_item',
-      'tab' => [
-        '#type' => 'link',
-        '#title' => $this->t('Edit'),
-        '#url' => Url::fromRoute('<front>'),
-        '#cache' => [
-          'contexts' => [
-            'url.path',
-          ],
-        ],
-      ],
-      '#wrapper_attributes' => [
-        'class' => ['edit-toolbar-tab', 'visually-hidden'],
-        'id' => 'edit-tab-button',
-      ],
-      '#weight' => 1000,
-    ];
-  }
-
-  /**
-   * Set current local task.
+   * Populates localLinks and currentLocalTasks based on the current route.
    */
   private function setCurrentLocalTasks() {
     $this->currentLocalTasks = $this->localTaskManager->getLocalTasks($this->routeMatch->getRouteName(), 0);
@@ -165,14 +165,20 @@ class UmdTerpToolbar {
   }
 
   /**
-   * Set current route.
+   * Sets the current route name from local tasks.
    */
   private function setCurrentRoute() {
     $this->currentRoute = $this->currentLocalTasks['route_name'];
   }
 
   /**
-   * Check if local task exists.
+   * Checks if a local task exists for the current route.
+   *
+   * @param string $localTask
+   *   The local task route name.
+   *
+   * @return bool
+   *   TRUE if the local task exists, FALSE otherwise.
    */
   private function localTaskExists($localTask) {
     return in_array($localTask, array_keys($this->localLinks)) ? TRUE : FALSE;

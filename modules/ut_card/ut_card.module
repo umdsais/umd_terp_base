@@ -1,8 +1,14 @@
 <?php
-
 /**
  * @file
- * Ut_card module file.
+ * Card module for displaying content in card layouts and groups.
+ *
+ * Provides help, theme hooks, and preprocess functions for the ut_card paragraph type.
+ *
+ * Implements:
+ *   - hook_help(): Displays module help and README.
+ *   - hook_theme(): Registers paragraph templates.
+ *   - hook_preprocess_paragraph(): Adds card group style variables.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;

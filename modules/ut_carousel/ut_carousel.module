@@ -1,8 +1,14 @@
 <?php
-
 /**
  * @file
- * Ut_carousel module file.
+ * Carousel module for displaying image carousels in content.
+ *
+ * Provides help, theme hooks, and content tips for the ut_carousel paragraph type.
+ *
+ * Implements:
+ *   - hook_help(): Displays module help and README.
+ *   - hook_theme(): Registers paragraph templates.
+ *   - hook_field_WIDGET_TYPE_paragraphs_form_alter(): Adds content tips for editors.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;

@@ -1,8 +1,14 @@
 <?php
-
 /**
  * @file
- * Ut_slideshow module file.
+ * Slideshow module for displaying image slideshows in content.
+ *
+ * Provides help, theme hooks, and preprocess functions for the ut_slideshow paragraph type.
+ *
+ * Implements:
+ *   - hook_help(): Displays module help and README.
+ *   - hook_theme(): Registers paragraph templates.
+ *   - hook_preprocess_paragraph(): Sets variables for slideshow length.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;

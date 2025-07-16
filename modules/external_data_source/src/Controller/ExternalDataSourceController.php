@@ -12,19 +12,27 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Masterminds\HTML5\Parser\UTF8Utils;
 
 /**
- * Class ExternalDataSourceController.
+ * Controller for External Data Source plugin endpoints.
+ *
+ * Provides endpoints for plugin autocomplete and formatting plugin responses
+ * for select field options in Drupal forms.
+ *
+ * @package Drupal\external_data_source\Controller
  */
 class ExternalDataSourceController extends ControllerBase {
 
   /**
-   * Drupal\external_data_source\Plugin\ExternalDataSourceManager definition.
+   * The plugin manager for external data source plugins.
    *
    * @var \Drupal\external_data_source\Plugin\ExternalDataSourceManager
    */
   protected $pluginManagerExternalWsSource;
 
   /**
-   * {@inheritdoc}
+   * Constructs the controller with the plugin manager.
+   *
+   * @param \Drupal\external_data_source\Plugin\ExternalDataSourceManager $plugin_manager_external_ws_source
+   *   The plugin manager service.
    */
   public function __construct(ExternalDataSourceManager $plugin_manager_external_ws_source) {
     $this->pluginManagerExternalWsSource = $plugin_manager_external_ws_source;
@@ -32,6 +40,8 @@ class ExternalDataSourceController extends ControllerBase {
 
   /**
    * {@inheritdoc}
+   *
+   * Dependency injection factory method.
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -40,11 +50,16 @@ class ExternalDataSourceController extends ControllerBase {
   }
 
   /**
-   * Autocomplete.
+   * Provides autocomplete for external data source plugins.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The HTTP request object.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   A JSON response containing plugin options.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   *   If the requested plugin is not found.
    */
   public function autocomplete(Request $request) {
     $requestedPlugin = $request->query->get('plugin_name');
@@ -65,13 +80,13 @@ class ExternalDataSourceController extends ControllerBase {
   }
 
   /**
-   * OptionsForSelect.
+   * Formats plugin response for select/checkbox field options.
    *
    * @param \Drupal\external_data_source\Plugin\ExternalDataSourceInterface $pluginInstance
-   *   This controller Method will return a formatted array to be used as
-   *   options inside a checkbox or select field.
+   *   The plugin instance.
    *
    * @return array
+   *   An array of options for form fields.
    *
    * @throws \Masterminds\HTML5\Exception
    */

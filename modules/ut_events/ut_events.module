@@ -1,8 +1,13 @@
 <?php
-
 /**
  * @file
- * Ut_events module file.
+ * Events module for displaying event feeds and filters.
+ *
+ * Provides help and preprocess functions for the ut_events paragraph type.
+ *
+ * Implements:
+ *   - hook_help(): Displays module help and README.
+ *   - hook_preprocess_paragraph(): Sets variables for event display and filtering.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;

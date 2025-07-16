@@ -6,12 +6,28 @@ use GuzzleHttp\Client;
 use Drupal\Component\Serialization\Json;
 
 /**
- * Defines a UmdTerpBase class.
+ * Provides static methods for interacting with UMD Today and UMD Calendar APIs.
+ *
+ * This class contains utility functions for fetching news and event data,
+ * formatting taxonomy responses, and building GraphQL queries for Drupal modules.
+ *
+ * Usage:
+ *   $news = UmdTerpBase::middleware_get_news($query);
+ *   $events = UmdTerpBase::middleware_get_events($query);
+ *   $formatted = UmdTerpBase::middleware_format_taxonomy($response);
+ *
+ * @package Drupal\umd_terp_base
  */
 class UmdTerpBase {
 
   /**
-   * Gets taxonomies/term ID's/etc from UMD Today for News.
+   * Gets taxonomies/term IDs/etc from UMD Today for News.
+   *
+   * @param string $query
+   *   The GraphQL query string.
+   *
+   * @return array|null
+   *   The decoded response from the API, or NULL on error.
    */
   public static function middleware_get_news($query) {
     $umd_terp_base_settings = \Drupal::config('umd_terp_base.settings');
@@ -34,11 +50,16 @@ class UmdTerpBase {
       \Drupal::messenger()->addError($message);
       return;
     }
-
   }
 
   /**
-   * Gets taxonomies/term ID's/etc from UMD Calendar for Events.
+   * Gets taxonomies/term IDs/etc from UMD Calendar for Events.
+   *
+   * @param string $query
+   *   The GraphQL query string.
+   *
+   * @return array|null
+   *   The decoded response from the API, or NULL on error.
    */
   public static function middleware_get_events($query) {
     $umd_terp_base_settings = \Drupal::config('umd_terp_base.settings');
@@ -61,13 +82,18 @@ class UmdTerpBase {
       \Drupal::messenger()->addError($message);
       return;
     }
-
   }
 
   /**
-   * Taxonomy Terms, format response.
+   * Formats taxonomy terms from API response.
    *
-   * Flatten the response and be sure all are string.
+   * Flattens the response and ensures all values are strings.
+   *
+   * @param array $response
+   *   The API response containing taxonomy data.
+   *
+   * @return array
+   *   An array of formatted taxonomy terms with 'value' and 'label'.
    */
   public static function middleware_format_taxonomy($response) {
     $collection = [];
@@ -81,9 +107,13 @@ class UmdTerpBase {
   }
 
   /**
-   * News Taxonomy Terms, set query.
+   * Builds a GraphQL query for news taxonomy terms and fetches them.
    *
-   * Define the query for getting news taxonomy terms.
+   * @param string $taxonomy
+   *   The taxonomy group name.
+   *
+   * @return array|null
+   *   The decoded response from the API, or NULL on error.
    */
   public static function middleware_get_news_taxonomy($taxonomy) {
     $query = 'getCategoriesByType { categories(group: \\"' . $taxonomy . '\\") { title id }}';
@@ -91,9 +121,13 @@ class UmdTerpBase {
   }
 
   /**
-   * Events Taxonomy Terms, set query.
+   * Builds a GraphQL query for events taxonomy terms and fetches them.
    *
-   * Define the query for getting events taxonomy terms.
+   * @param string $taxonomy
+   *   The taxonomy group name.
+   *
+   * @return array|null
+   *   The decoded response from the API, or NULL on error.
    */
   public static function middleware_get_events_taxonomy($taxonomy) {
     $query = 'getCategoriesByType { categories(group: \\"' . $taxonomy . '\\") { title id }}';

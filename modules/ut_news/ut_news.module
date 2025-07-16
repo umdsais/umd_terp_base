@@ -1,8 +1,13 @@
 <?php
-
 /**
  * @file
- * Ut_news module file.
+ * News module for displaying news feeds and filters.
+ *
+ * Provides help and preprocess functions for the ut_news paragraph type.
+ *
+ * Implements:
+ *   - hook_help(): Displays module help and README.
+ *   - hook_preprocess_paragraph(): Sets variables for news display and filtering.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
