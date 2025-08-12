@@ -30,7 +30,7 @@
   <ul>
     <li class="subnav-parent">
       {% if content['#parent'] %}
-        <a href="{{ content['#parent']['#link'] }}"><span class="icon icon-chevron-right" aria-hidden="true"></span>{{ content['#parent']['#title'] }}</a>
+        <a href="{{ content['#parent']['#link'] }}"><svg class="chevron chevron--left" title="sidebar chevron" aria-hidden="true" width="1em" height="1em" viewBox="0 0 96 96" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M52.9255 47.8801L18 13H42.214L77.5269 47.539L77.1858 47.8801L77.5269 48.2212L42.214 82.7602H18L52.9255 47.8801Z"></path></svg>{{ content['#parent']['#title'] }}</a>
       {% endif %}
       {{ content }}
     </li>

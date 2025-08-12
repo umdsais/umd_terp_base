@@ -1,3 +1,8 @@
+11.0.3
+======
+- All icomoon icon font assets, CSS, and references removed from base module templates.
+- Sidebar menu chevron now uses inline SVG with .chevron--left class for direction and consistent styling.
+- Updated SCSS to include .chevron utility class for consistent icon sizing and direction.
 11.0.2
 ======
 - Documentation improvements across all modules
