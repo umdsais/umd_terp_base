@@ -13,9 +13,15 @@
 
 <umd-element-card data-theme="{{ brightness }}" border="false" aligned="false">
 	{% if content.field_ut_card_image|field_value %}
-		<a slot="image" href="/">
-			<img src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('optimized')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}"/>
-		</a>
+    {% if content.field_ut_card_link.0 %}
+		<a slot="image" href="{{ link['#url'] }}">
+      <img src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('optimized')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}"/>
+    </a>
+    {% else %}
+    <span slot="image">
+      <img src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('optimized')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}"/>
+    </span>
+    {% endif %}
 	{% endif %}
 	{% if content.field_ut_card_title|field_value %}
 		<h2 slot="headline">{{ content.field_ut_card_title|field_value }}</h2>
