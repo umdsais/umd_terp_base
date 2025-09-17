@@ -11,6 +11,10 @@
 	{% set brightness = 'dark'%}
 {% endif %}
 
+{% if content.field_ut_card_link.0 %}
+		{% set link = content.field_ut_card_link.0 %}
+{% endif %}	
+
 <umd-element-card data-theme="{{ brightness }}" border="false" aligned="false">
 	{% if content.field_ut_card_image|field_value %}
 		<a slot="image" href="{{ link['#url'] }}" target="{{ link['#options'].attributes.target|default('_self') }}">
@@ -24,7 +28,6 @@
 		<div slot="text">{{ content.field_ut_card_text|field_value }}</div>
 	{% endif %}
 	{% if content.field_ut_card_link.0 %}
-		{% set link = content.field_ut_card_link.0 %}
 		<umd-element-call-to-action slot="actions" data-display="secondary" data-visual-size="" data-theme="{{ brightness }}">
 			<a href="{{ link['#url'] }}" target="{{ link['#options'].attributes.target|default('_self') }}">
 				{{ link['#title'] }}

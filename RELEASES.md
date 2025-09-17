@@ -1,3 +1,7 @@
+11.0.5
+======
+- Image Cards Linking to Home Page: https://trello.com/c/S7jK4FV1/3-image-cards-linking-to-home-page. Readjust link definition placement.
+
 11.0.4
 ======
 - Image Cards Linking to Home Page: https://trello.com/c/S7jK4FV1/3-image-cards-linking-to-home-page
