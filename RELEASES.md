@@ -1,3 +1,7 @@
+11.0.4
+======
+- Image Cards Linking to Home Page: https://trello.com/c/S7jK4FV1/3-image-cards-linking-to-home-page
+
 11.0.3
 ======
 - All icomoon icon font assets, CSS, and references removed from base module templates.
