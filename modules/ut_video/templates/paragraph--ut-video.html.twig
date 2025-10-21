@@ -17,7 +17,7 @@
 		{% block content %}
 			<figure>
 				<div class="embed-responsive embed-responsive-2by1">
-					<iframe class="embed-responsive-item" title="{{ content.field_ut_video_title|field_value }}" src="{{ content.field_ut_video_url|field_value }}" allowfullscreen></iframe>
+					<iframe class="embed-responsive-item" title="{{ content.field_ut_video_title.0['#context'].value }}" src="{{ content.field_ut_video_url|field_value }}" allowfullscreen></iframe>
 				</div>
 				{% if content.field_ut_video_caption|field_value %}
 					<figcaption>{{ content.field_ut_video_caption|field_value }}</figcaption>
