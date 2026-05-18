@@ -19,6 +19,25 @@ function umd_terp_base_preprocess_paragraph(&$variables) {
 }
 
 /**
+ * Implements hook_form_alter().
+ *
+ * Adds help text directly to the summary textarea on article and event forms.
+ */
+function umd_terp_base_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $summary_forms = [
+    'node_umd_terp_article_form',
+    'node_umd_terp_article_edit_form',
+    'node_umd_terp_event_form',
+    'node_umd_terp_event_edit_form',
+  ];
+  if (in_array($form_id, $summary_forms)) {
+    if (isset($form['body']['widget'][0]['summary'])) {
+      $form['body']['widget'][0]['summary']['#description'] = t('A brief summary displayed in listings and search results. Keep it to 1–2 sentences.');
+    }
+  }
+}
+
+/**
  * Implements hook_toolbar().
  *
  * Adds admin edit links/tabs in toolbar, so we don't need to have directly on the page.

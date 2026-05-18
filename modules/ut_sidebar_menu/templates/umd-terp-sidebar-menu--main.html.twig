@@ -36,9 +36,18 @@
       <ul>
     {% endif %}
     {% for item in items %}
-      {# {{ dump(item) }} #}
       <li{{ item.attributes }}>
-        {% if item.in_active_trail %}
+        {% set url_string = item.url.toString() %}
+        {% set has_fragment = '#' in url_string %}
+        {% if has_fragment %}
+          {% if item.in_active_trail %}
+            {% set tmp = '<span class="visually-hidden">The Current Page is </span>'~item.title %}
+            {% set link_text %}{{ tmp|raw }}{% endset %}
+            <a href="{{ url_string }}">{{ link_text }}</a>
+          {% else %}
+            <a href="{{ url_string }}">{{ item.title }}</a>
+          {% endif %}
+        {% elseif item.in_active_trail %}
           {% set tmp = '<span class="visually-hidden">The Current Page is </span>'~item.title %}
           {% set link_text %}{{ tmp|raw }}{% endset %}
           {{ link(link_text, item.url, { 'aria-current':'page'}) }}

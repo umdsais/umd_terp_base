@@ -61,6 +61,9 @@ class EventsCampusLocations extends ExternalDataSourceBase {
    */
   public function getResponse() {
     $data = UmdTerpBase::middleware_get_events_taxonomy('campusLocationBuildings');
+    if ($data === NULL) {
+      return [];
+    }
     return $this->formatResponse($data);
   }
 

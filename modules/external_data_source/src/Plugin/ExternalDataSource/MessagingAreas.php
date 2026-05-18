@@ -61,6 +61,9 @@ class MessagingAreas extends ExternalDataSourceBase {
    */
   public function getResponse() {
     $data = UmdTerpBase::middleware_get_news_taxonomy('messagingAreas');
+    if ($data === NULL) {
+      return [];
+    }
     return $this->formatResponse($data);
   }
 

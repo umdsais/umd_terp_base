@@ -5,9 +5,196 @@
  * Install, update and uninstall functions for the UMD Terp Base module.
  */
 
+use Drupal\system\Entity\Menu;
+
+/**
+ * Helper to create the three mega footer menus if they don't already exist.
+ */
+function _umd_terp_base_create_mega_footer_menus() {
+  $menus = [
+    'footer-mega-menu-column-one' => [
+      'label' => 'Footer Mega Menu Column One',
+      'description' => 'Link column one for the Mega Footer. Only displayed when "Mega Footer" is selected as the footer type. Manage the column heading label at /admin/appearance/settings/umd_terp',
+    ],
+    'footer-mega-menu-column-two' => [
+      'label' => 'Footer Mega Menu Column Two',
+      'description' => 'Link column two for the Mega Footer. Only displayed when "Mega Footer" is selected as the footer type. Manage the column heading label at /admin/appearance/settings/umd_terp',
+    ],
+    'footer-mega-menu-column-three' => [
+      'label' => 'Footer Mega Menu Column Three',
+      'description' => 'Link column three for the Mega Footer. Only displayed when "Mega Footer" is selected as the footer type. Manage the column heading label at /admin/appearance/settings/umd_terp',
+    ],
+    'utility-menu' => [
+      'label' => 'Header Utility Menu',
+      'description' => 'Links displayed in the site header utility navigation and mobile slide-out panel.',
+    ],
+  ];
+  foreach ($menus as $id => $data) {
+    if (!Menu::load($id)) {
+      Menu::create([
+        'id' => $id,
+        'label' => $data['label'],
+        'description' => $data['description'],
+      ])->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_install().
+ */
+function umd_terp_base_install() {
+  _umd_terp_base_create_mega_footer_menus();
+}
+
 /**
  * Add support for blockquote link.
  */
 function umd_terp_base_update_8001() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'umd_terp_base');
+}
+
+/**
+ * Create mega footer menus and remove unused footer/global menus.
+ */
+function umd_terp_base_update_8002() {
+  _umd_terp_base_create_mega_footer_menus();
+
+  // Delete unused menus. Delete any link content first, then unlock if the
+  // menu is a locked system menu (e.g. Drupal core's 'footer' menu) before
+  // removing it.
+  foreach (['footer', 'global'] as $menu_id) {
+    $menu = Menu::load($menu_id);
+    if (!$menu) {
+      continue;
+    }
+    // Remove any menu link content items assigned to this menu.
+    $links = \Drupal::entityTypeManager()
+      ->getStorage('menu_link_content')
+      ->loadByProperties(['menu_name' => $menu_id]);
+    foreach ($links as $link) {
+      $link->delete();
+    }
+    // Unlock locked system menus before deletion.
+    if ($menu->isLocked()) {
+      $menu->set('locked', FALSE)->save();
+    }
+    $menu->delete();
+  }
+}
+
+/**
+ * Remove stale/unused theme settings from umd_terp.settings config.
+ */
+function umd_terp_base_update_8003() {
+  $config = \Drupal::configFactory()->getEditable('umd_terp.settings');
+  $dead_keys = [
+    'umd_terp_header_light',
+    'umd_terp_sidebar_right',
+    'umd_terp_disable_dark_mode_options',
+    'umd_terp_footer_logo',
+    'umd_terp_footer_logo_path',
+    'umd_terp_footer_logo_upload',
+    'umd_terp_footer_logo_svg',
+    'umd_terp_phone_secondary',
+    'umd_terp_email_secondary',
+  ];
+  foreach ($dead_keys as $key) {
+    $config->clear($key);
+  }
+  $config->save();
+}
+
+/**
+ * Switch all link fields to use the link_attributes widget for consistency.
+ */
+function umd_terp_base_update_8004() {
+  $fields = [
+    ['entity_type' => 'node', 'bundle' => 'umd_terp_event', 'field' => 'field_umdt_ct_event_link'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_alert', 'field' => 'field_ut_alert_link'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_feature', 'field' => 'field_ut_feature_link'],
+  ];
+  foreach ($fields as $item) {
+    $display = \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->load($item['entity_type'] . '.' . $item['bundle'] . '.default');
+    if (!$display) {
+      continue;
+    }
+    $component = $display->getComponent($item['field']);
+    if (!$component) {
+      continue;
+    }
+    $component['type'] = 'link_attributes';
+    $component['settings']['enabled_attributes'] = [
+      'target' => TRUE,
+      'rel' => FALSE,
+      'class' => FALSE,
+    ];
+    $display->setComponent($item['field'], $component)->save();
+  }
+}
+
+/**
+ * Normalize all link fields to link_attributes widget with target only.
+ */
+function umd_terp_base_update_8005() {
+  $fields = [
+    ['entity_type' => 'node', 'bundle' => 'umd_terp_event', 'field' => 'field_umdt_ct_event_link'],
+    ['entity_type' => 'node', 'bundle' => 'umd_terp_homepage', 'field' => 'field_umdt_ct_hero_cta'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_alert', 'field' => 'field_ut_alert_link'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_blockquote', 'field' => 'field_ut_blockquote_source_url'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_button', 'field' => 'field_ut_button_link'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_card', 'field' => 'field_ut_card_link'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_feature', 'field' => 'field_ut_feature_link'],
+    ['entity_type' => 'paragraph', 'bundle' => 'ut_link', 'field' => 'field_ut_link_link'],
+  ];
+  foreach ($fields as $item) {
+    $display = \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->load($item['entity_type'] . '.' . $item['bundle'] . '.default');
+    if (!$display) {
+      continue;
+    }
+    $component = $display->getComponent($item['field']);
+    if (!$component) {
+      continue;
+    }
+    $component['type'] = 'link_attributes';
+    $component['settings']['enabled_attributes'] = [
+      'target' => TRUE,
+      'rel' => FALSE,
+      'class' => FALSE,
+    ];
+    $display->setComponent($item['field'], $component)->save();
+  }
+}
+
+/**
+ * Enable body summary field on umd_terp_event content type.
+ */
+function umd_terp_base_update_8006() {
+  $config = \Drupal::configFactory()->getEditable('field.field.node.umd_terp_event.body');
+  $config->set('settings.display_summary', TRUE)->save();
+}
+
+/**
+ * Update hero subtitle field help text to indicate 20-character maximum.
+ */
+function umd_terp_base_update_8007() {
+  $config = \Drupal::configFactory()->getEditable('field.field.node.umd_terp_homepage.field_umdt_ct_hero_subtitle');
+  $config->set('description', 'Short eyebrow/label displayed above the hero headline. 20 characters or fewer is optimal; 40 characters maximum.')->save();
+}
+
+/**
+ * Create the Utility Menu for use in the site header.
+ */
+function umd_terp_base_update_8008() {
+  if (!\Drupal\system\Entity\Menu::load('utility-menu')) {
+    \Drupal\system\Entity\Menu::create([
+      'id' => 'utility-menu',
+      'label' => 'Header Utility Menu',
+      'description' => 'Links displayed in the site header utility navigation and mobile slide-out panel.',
+    ])->save();
+  }
 }

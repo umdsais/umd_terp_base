@@ -4,7 +4,7 @@ Paragraphs integration of buttons and links for UMD projects. This module provid
 
 This module contains markup only (no js or css), those should be provided in the UMD Terp Theme:
 
-- [UMD Terp Theme](https://github.com/UMD-Digital/umd_terp)
+- [UMD Terp Theme](https://github.com/umdsais/umd_terp)
 
 ## Configuration
 

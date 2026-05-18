@@ -14,7 +14,7 @@
         <h2 class="widget-heading h3">News</h2>
       {% endif %}
 
-      {% if ut_news_list[0] %}
+      {% if ut_news_list and ut_news_list[0] %}
         <div class="umd-layout-grid-gap-three">
           {% for news in ut_news_list %}
 

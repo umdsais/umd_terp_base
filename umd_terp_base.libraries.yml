@@ -1,0 +1,5 @@
+element-hash-open:
+  js:
+    js/element-hash-open.js: {}
+  dependencies:
+    - core/drupal

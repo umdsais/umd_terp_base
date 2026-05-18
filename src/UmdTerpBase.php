@@ -33,22 +33,28 @@ class UmdTerpBase {
     $umd_terp_base_settings = \Drupal::config('umd_terp_base.settings');
     $news_api_bearer_token = $umd_terp_base_settings->get('umd_terp_base.news_api_token');
     if (!empty($news_api_bearer_token)) {
-      $graphQLquery = '{"query": "query ' . $query . '"}';
-      $response = (new Client)->request('post', 'https://today.umd.edu/graphql', [
-        'headers' => [
-          'Authorization' => 'Bearer ' . $news_api_bearer_token,
-          'Content-Type' => 'application/json',
-        ],
-        'body' => $graphQLquery,
-      ]);
-      $result = Json::decode($response->getBody());
-      return $result;
+      try {
+        $graphQLquery = '{"query": "query ' . $query . '"}';
+        $response = (new Client)->request('post', 'https://today.umd.edu/graphql', [
+          'headers' => [
+            'Authorization' => 'Bearer ' . $news_api_bearer_token,
+            'Content-Type' => 'application/json',
+          ],
+          'body' => $graphQLquery,
+        ]);
+        $result = Json::decode($response->getBody());
+        return $result;
+      }
+      catch (\Exception $e) {
+        $message = 'Failed to connect to UMD Today News API: ' . $e->getMessage();
+        \Drupal::logger('umd_terp_base')->error($message);
+        return NULL;
+      }
     }
     else {
       $message = 'Please set or check the UMD Today News API Bearer token on the UMD Terp modules configuration page.';
       \Drupal::logger('umd_terp_base')->alert($message);
-      \Drupal::messenger()->addError($message);
-      return;
+      return NULL;
     }
   }
 
@@ -65,22 +71,28 @@ class UmdTerpBase {
     $umd_terp_base_settings = \Drupal::config('umd_terp_base.settings');
     $calendar_api_bearer_token = $umd_terp_base_settings->get('umd_terp_base.calendar_api_token');
     if (!empty($calendar_api_bearer_token)) {
-      $graphQLquery = '{"query": "query ' . $query . '"}';
-      $response = (new Client)->request('post', 'https://calendar.umd.edu/graphql', [
-        'headers' => [
-          'Authorization' => 'Bearer ' . $calendar_api_bearer_token,
-          'Content-Type' => 'application/json',
-        ],
-        'body' => $graphQLquery,
-      ]);
-      $result = Json::decode($response->getBody());
-      return $result;
+      try {
+        $graphQLquery = '{"query": "query ' . $query . '"}';
+        $response = (new Client)->request('post', 'https://calendar.umd.edu/graphql', [
+          'headers' => [
+            'Authorization' => 'Bearer ' . $calendar_api_bearer_token,
+            'Content-Type' => 'application/json',
+          ],
+          'body' => $graphQLquery,
+        ]);
+        $result = Json::decode($response->getBody());
+        return $result;
+      }
+      catch (\Exception $e) {
+        $message = 'Failed to connect to UMD Calendar API: ' . $e->getMessage();
+        \Drupal::logger('umd_terp_base')->error($message);
+        return NULL;
+      }
     }
     else {
       $message = 'Please set or check the UMD Today Calendar API Bearer token on the UMD Terp modules configuration page.';
       \Drupal::logger('umd_terp_base')->alert($message);
-      \Drupal::messenger()->addError($message);
-      return;
+      return NULL;
     }
   }
 

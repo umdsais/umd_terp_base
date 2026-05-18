@@ -8,7 +8,8 @@
  * Implements:
  *   - hook_help(): Displays module help and README.
  *   - hook_theme(): Registers paragraph templates.
- *   - hook_field_WIDGET_TYPE_paragraphs_form_alter(): Adds content tips for editors.
+ *   - hook_field_widget_single_element_paragraphs_form_alter(): Adds content tips for editors
+ *     and displays the direct link hash for each accordion item.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -22,17 +23,8 @@ function ut_accordion_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.ut_accordion':
       $text = file_get_contents(dirname(__FILE__) . "/README.md");
-      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
-        return '<pre>' . $text . '</pre>';
-      }
-      else {
-        // Use the Markdown filter to render the README.
-        $filter_manager = \Drupal::service('plugin.manager.filter');
-        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
-        $config = ['settings' => $settings];
-        $filter = $filter_manager->createInstance('markdown', $config);
-        return $filter->process($text, 'en');
-      }
+      $converter = new \League\CommonMark\CommonMarkConverter();
+      return $converter->convert($text)->getContent();
   }
   return NULL;
 }
@@ -51,18 +43,17 @@ function ut_accordion_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_field_WIDGET_TYPE_paragraphs_form_alter().
+ * Implements hook_field_widget_single_element_paragraphs_form_alter().
  *
  * Adds "Content Tips" helper text to the paragraph.
  */
-function ut_accordion_field_widget_paragraphs_form_alter(&$element, &$form_state, $context) {
+function ut_accordion_field_widget_single_element_paragraphs_form_alter(&$element, $form_state, $context) {
   if ($element['#paragraph_type'] == 'ut_accordion') {
     // Tips text.
     $markup = '<p>Group related information in a series of accordions.</p>';
     $markup = '<ul>';
     $markup .= '<li><strong>Always create two or more accordions.</strong> Use brief, descriptive phrases for each label.</li>';
-    $markup .= '<li><strong>Minimize embedded images and tables.</strong> If you’re adding a lot of content to a tab, consider using a different widget. </li>';
-    $markup .= '<li><a target="_blank" href="/admin/help/ut_accordion">Accordion Module Help</a></li>';
+    $markup .= '<li><strong>Minimize embedded images and tables.</strong> If you’re adding a lot of content to a tab, consider using a different widget. </li>';    $markup .= '<li><strong>Direct links:</strong> Each accordion item supports a direct link that will scroll to and open it automatically. Expand the <em>Direct Link</em> section within each accordion item to find its link.</li>';    $markup .= '<li><a target="_blank" href="/admin/help/ut_accordion">Accordion Module Help</a></li>';
     $markup .= '</ul>';
 
     $element['ut_accordion_tips'] = [
@@ -72,4 +63,23 @@ function ut_accordion_field_widget_paragraphs_form_alter(&$element, &$form_state
     ];
     $element['ut_accordion_tips']['#markup'] = $markup;
   }
-}
+  if ($element['#paragraph_type'] == 'ut_accordion_item') {
+    $paragraph = $context['items']->get($element['#delta'])->entity;
+
+    if ($paragraph && !$paragraph->isNew()) {
+      $hash = '#accordion-item-' . $paragraph->id();
+      $markup = '<p>Append the following to any page URL where this accordion appears to create a direct link. When visited, the page will automatically scroll to and open this accordion item:</p>';
+      $markup .= '<p><code>' . $hash . '</code></p>';
+      $markup .= '<p>Example: <code>/your-page' . $hash . '</code></p>';
+    }
+    else {
+      $markup = '<p>Save this page to generate a direct link for this accordion item.</p>';
+    }
+
+    $element['ut_accordion_item_hash'] = [
+      '#type' => 'details',
+      '#title' => t('Direct Link'),
+      '#weight' => -999,
+    ];
+    $element['ut_accordion_item_hash']['#markup'] = $markup;
+  }}

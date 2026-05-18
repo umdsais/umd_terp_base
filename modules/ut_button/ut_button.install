@@ -32,3 +32,49 @@ function ut_button_update_8002() {
   }
 
 }
+
+/**
+ * Re-add Center Button Group field to ut_button_set paragraph type.
+ */
+function ut_button_update_8003() {
+  // Re-create field storage if it was fully removed.
+  $storage = \Drupal\field\Entity\FieldStorageConfig::loadByName('paragraph', 'field_ut_button_center');
+  if (!$storage) {
+    \Drupal\field\Entity\FieldStorageConfig::create([
+      'field_name' => 'field_ut_button_center',
+      'entity_type' => 'paragraph',
+      'type' => 'boolean',
+      'cardinality' => 1,
+      'translatable' => TRUE,
+    ])->save();
+  }
+
+  // Re-create field instance on ut_button_set only.
+  if (!FieldConfig::loadByName('paragraph', 'ut_button_set', 'field_ut_button_center')) {
+    FieldConfig::create([
+      'field_storage' => \Drupal\field\Entity\FieldStorageConfig::loadByName('paragraph', 'field_ut_button_center'),
+      'bundle' => 'ut_button_set',
+      'label' => 'Center Button Group',
+      'description' => 'Check to center the buttons within this set.',
+      'required' => FALSE,
+      'default_value' => [['value' => 0]],
+      'settings' => [
+        'on_label' => 'On',
+        'off_label' => 'Off',
+      ],
+    ])->save();
+  }
+
+  // Add the field to the default form display.
+  $display = \Drupal::entityTypeManager()
+    ->getStorage('entity_form_display')
+    ->load('paragraph.ut_button_set.default');
+  if ($display && !$display->getComponent('field_ut_button_center')) {
+    $display->setComponent('field_ut_button_center', [
+      'type' => 'boolean_checkbox',
+      'settings' => ['display_label' => TRUE],
+      'weight' => 0,
+      'region' => 'content',
+    ])->save();
+  }
+}

@@ -17,7 +17,7 @@
 
       {# <umd-feed-events row-count="1" lazyload="true" token="{{ ut_events_api_token }}"></umd-feed-events> #}
 
-      {% if ut_events_list[0] %}
+      {% if ut_events_list and ut_events_list[0] %}
 
         <div class="umd-layout-grid-gap-three">
           {% for evnt in ut_events_list %}

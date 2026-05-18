@@ -6,6 +6,7 @@
 #}
 
 {% block paragraph %}
+	{{ attach_library('umd_terp_base/element-hash-open') }}
 	<div{{attributes.setAttribute('id','accordion-'~paragraph.id())}}>
 		{% block content %}
 			<umd-element-accordion>
@@ -13,7 +14,7 @@
 				{% for key, item in content.field_ut_accordion_items %}
 					{% if key|first != '#' %}
 						{% set expanded = (_loop_index == 0) and (paragraph.field_ut_accordion_open_first.value) %}
-						<umd-element-accordion-item data-visual-open="{{ expanded ? 'true' : 'false' }}" resize="" data-theme="light">
+						<umd-element-accordion-item id="accordion-item-{{ item['#paragraph'].id() }}" data-visual-open="{{ expanded ? 'true' : 'false' }}" resize="" data-theme="light">
 							<p slot="headline">{{ item['#paragraph'].field_ut_accordion_item_title.value }}</p>
 							<div slot="text" class="editor-content">
 								{% include directory ~ '/templates/helpers/paragraph-content.html.twig' with { 'item': item, 'content': item['#paragraph'].field_ut_accordion_item_content } %}

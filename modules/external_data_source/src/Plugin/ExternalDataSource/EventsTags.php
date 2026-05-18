@@ -61,6 +61,9 @@ class EventsTags extends ExternalDataSourceBase {
    */
   public function getResponse() {
     $data = UmdTerpBase::middleware_get_events_taxonomy('tags');
+    if ($data === NULL) {
+      return [];
+    }
     return $this->formatResponse($data);
   }
 

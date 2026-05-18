@@ -31,7 +31,8 @@
         "drupal/tablefield": "*",
         "drupal/viewsreference": "^2.0@beta",
         "drupal/webform": "^6.2@beta",
-        "drupal/core": "^11.0"
+        "drupal/core": "^11.0",
+        "league/commonmark": "^2.0"
     },
     "conflict": {
         "drupal/core": "<11.0",

@@ -27,14 +27,15 @@
 					<p slot="attribution">{{ content.field_ut_blockquote_author|field_value }}</p>
 				{% endif %}
 				{% if content.field_ut_blockquote_title|field_value %}
-					<p slot="attribution-sub-text">xx{{ content.field_ut_blockquote_title|field_value }}</p>
+					<p slot="attribution-sub-text">{{ content.field_ut_blockquote_title|field_value }}</p>
 				{% endif %}
 
 				{% if content.field_ut_blockquote_source|field_value %}
 					{% if content.field_ut_blockquote_source_url|field_value %}
 						{% set link = content.field_ut_blockquote_source_url.0 %}
+						{% set target = link['#url'].getOption('attributes')['target'] ?? '_self' %}
 						<umd-element-call-to-action slot="actions" data-display="secondary" data-visual-size="" data-theme="{{ brightness }}">
-							<a href="{{ link['#url'] }}" target="{{ link['#options'].attributes.target|default('_self') }}">
+							<a href="{{ link['#url'] }}" target="{{ target }}">
 								{{ content.field_ut_blockquote_source|field_value }}
 							</a>
 						</umd-element-call-to-action>

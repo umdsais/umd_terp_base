@@ -61,6 +61,9 @@ class Audience extends ExternalDataSourceBase {
    */
   public function getResponse() {
     $data = UmdTerpBase::middleware_get_news_taxonomy('audience');
+    if ($data === NULL) {
+      return [];
+    }
     return $this->formatResponse($data);
   }
 

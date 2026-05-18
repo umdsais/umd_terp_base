@@ -1,3 +1,33 @@
+11.1.0
+======
+
+### Features
+- Added `element-hash-open` Drupal JS behavior and library (`umd_terp_base/element-hash-open`): sets `data-visual-open="true"` on any UMD web component matching the page URL hash, enabling deep-link opening of accordions, tabs, and similar components.
+- Accordion template (`ut_accordion`): attaches `element-hash-open` library; each accordion item now has a unique `id` attribute (`accordion-item-{id}`) for deep-linking.
+- Mega Footer menus and Header Utility Menu are now created on fresh installs via `hook_install`.
+- Added `umd_terp_base.libraries.yml` and `umd_terp_base.schema.yml`.
+
+### Changes
+- Card template (`ut_card`): image slot is now conditionally wrapped in an `<a>` tag only when a link field is present; falls back to a plain `<img>` slot.
+- Sidebar menu template (`umd-terp-sidebar-menu--main.html.twig`): fragment/hash URLs (`#`) are now rendered as plain `<a>` tags to avoid Drupal's `link()` breaking them. Active trail hidden span fix applied (https://github.com/umdsais/umd_terp/issues/8).
+- `UmdTerpBase.php`: API calls to UMD Today News and Calendar APIs are now wrapped in try/catch with error logging; returns `NULL` on failure instead of triggering a fatal.
+- Removed `ut_news_and_events_columns` module (https://github.com/umdsais/umd_terp_base/issues/6).
+- CommonMark renderer updated across modules to use `League\CommonMark\CommonMarkConverter`.
+
+### Update Hooks
+- `umd_terp_base_update_8002`: Creates mega footer menus (Column One/Two/Three) and Header Utility Menu; removes unused `footer` and `global` menus.
+- `umd_terp_base_update_8003`: Removes deprecated theme settings keys (`umd_terp_header_light`, `umd_terp_sidebar_right`, etc.).
+- `umd_terp_base_update_8004`: Resets link field widget settings for event, alert, and feature paragraph types.
+- `umd_terp_base_update_8005`: Resets link field widget settings for event, homepage, alert, blockquote, button, card, and feature types.
+- `umd_terp_base_update_8006`: Enables summary textarea display for the event body field.
+- `umd_terp_base_update_8007`: Updates hero subtitle field description text.
+- `umd_terp_base_update_8008`: Creates `utility-menu` menu if it does not exist.
+- `ut_button_update_8003`: Re-adds `field_ut_button_center` boolean field to `ut_button_set` paragraph type.
+- `ut_events_update_8007`: Shows summary textarea in event edit form.
+- `ut_events_update_8008`: Clears event body field description.
+- `ut_news_update_8005`: Shows summary textarea in article edit form.
+- `ut_news_update_8006`: Clears article body field description.
+
 11.0.5
 ======
 - Image Cards Linking to Home Page: https://trello.com/c/S7jK4FV1/3-image-cards-linking-to-home-page. Readjust link definition placement.
@@ -11,6 +41,7 @@
 - All icomoon icon font assets, CSS, and references removed from base module templates.
 - Sidebar menu chevron now uses inline SVG with .chevron--left class for direction and consistent styling.
 - Updated SCSS to include .chevron utility class for consistent icon sizing and direction.
+
 11.0.2
 ======
 - Documentation improvements across all modules
@@ -35,7 +66,7 @@
 
 8.1.66
 ======
-- https://github.com/UMD-Digital/umd_terp_base/issues/6
+- https://github.com/umdsais/umd_terp_base/issues/6
 
 8.1.65
 ======
@@ -189,7 +220,7 @@
 
 8.1.26
 ======
-- Fixes https://github.com/UMD-Digital/umd_terp/issues/8, hidden span in active menu for sidebar.
+- Fixes https://github.com/umdsais/umd_terp/issues/8, hidden span in active menu for sidebar.
 
 8.1.25
 ======

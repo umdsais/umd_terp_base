@@ -86,3 +86,32 @@ function ut_events_update_8006() {
     FieldConfig::loadByName('paragraph', 'ut_events', 'field_ut_events_link')->delete();
   }
 }
+
+/**
+ * Always show summary field and add help text for umd_terp_event body.
+ */
+function ut_events_update_8007() {
+  // Always show the summary textarea in the edit form.
+  $display = \Drupal::entityTypeManager()
+    ->getStorage('entity_form_display')
+    ->load('node.umd_terp_event.default');
+  if ($display) {
+    $component = $display->getComponent('body');
+    if ($component) {
+      $component['settings']['show_summary'] = TRUE;
+      $display->setComponent('body', $component)->save();
+    }
+  }
+
+  // Add help text to the body field instance.
+  $config = \Drupal::configFactory()->getEditable('field.field.node.umd_terp_event.body');
+  $config->set('description', 'A brief summary displayed in listings and search results. Keep it to 1–2 sentences.')->save();
+}
+
+/**
+ * Clear incorrectly placed body field description on umd_terp_event.
+ */
+function ut_events_update_8008() {
+  \Drupal::configFactory()->getEditable('field.field.node.umd_terp_event.body')
+    ->set('description', '')->save();
+}

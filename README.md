@@ -27,6 +27,23 @@ Install as you normally would any drupal module.
 
 - No configuration needed.
 
+## Shared JavaScript Utilities
+
+### element-hash-open (`umd_terp_base/element-hash-open`)
+
+A generic Drupal behavior that opens UMD web components when a matching URL hash is present. Any component that supports the `data-visual-open` observed attribute can use this utility.
+
+**How it works:** When the page loads (or the hash changes), the behavior finds the element matching the URL hash by ID and sets `data-visual-open="true"` on it, triggering the component's built-in open animation.
+
+**To enable for a component**, add an `id` to the element in its Twig template and attach the library:
+
+```twig
+{{ attach_library('umd_terp_base/element-hash-open') }}
+<umd-element-accordion-item id="accordion-item-{{ paragraph.id() }}" ...>
+```
+
+**Currently used by:** `ut_accordion`
+
 ### Sub Modules
 
 See readme files of individual modules for more information.
@@ -53,7 +70,6 @@ See readme files of individual modules for more information.
 - ut_video: Paragraphs integration of a video for UMD projects. This module provides a way to add a a video to Kitchen Sink Pages.
 - ut_view: Paragraphs integration of a view for UMD projects. This module provides a way to add a view to Kitchen Sink Pages.
 - ut_webform: Paragraphs integration of a webform for UMD projects. This module provides a way to add a webform to Kitchen Sink Pages.
-- ut_news_and_events_columns: Paragraphs integration of a two column feature for UMD projects. This module provides a way to add a two column Local Articles and Events layout to Kitchen Sink Pages.
 
 ## Development
 

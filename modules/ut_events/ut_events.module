@@ -14,6 +14,73 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\umd_terp_base\UmdTerpBase;
 
 /**
+ * Implements hook_form_alter().
+ */
+function ut_events_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Only process node edit forms
+  if (strpos($form_id, 'node_') === FALSE || strpos($form_id, 'edit_form') === FALSE) {
+    return;
+  }
+  
+  // Check if Calendar API token is configured
+  $config = \Drupal::config('umd_terp_base.settings');
+  $token = $config->get('umd_terp_base.calendar_api_token');
+  
+  if (empty($token)) {
+    $form['#after_build'][] = 'ut_events_add_config_warning';
+  }
+}
+
+/**
+ * After build callback to add configuration warning to ut_events paragraphs.
+ */
+function ut_events_add_config_warning($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  ut_events_add_warning_to_paragraphs($form);
+  return $form;
+}
+
+/**
+ * Add warning message to ut_events paragraphs when API token is missing.
+ */
+function ut_events_add_warning_to_paragraphs(&$element) {
+  if (!is_array($element)) {
+    return;
+  }
+  
+  // Check if this element contains ut_events fields
+  $events_fields = [
+    'field_ut_events_title',
+    'field_ut_events_location_type',
+    'field_ut_events_campus_location',
+    'field_ut_events_campus_units',
+    'field_ut_events_tags'
+  ];
+  
+  $is_events_paragraph = FALSE;
+  foreach ($events_fields as $field_name) {
+    if (isset($element[$field_name])) {
+      $is_events_paragraph = TRUE;
+      break;
+    }
+  }
+  
+  if ($is_events_paragraph) {
+    $element['config_warning'] = [
+      '#type' => 'markup',
+      '#markup' => '<div class="messages messages--warning"><strong>Configuration Required:</strong> Please set the UMD Calendar API Bearer token in the <a href="/admin/config/umd_terp_base/config" target="_blank">UMD Terp Base configuration</a>. Without this token, category dropdowns in this form will not populate with options and no events content will display on the frontend.</div>',
+      '#weight' => -100,
+    ];
+  }
+  
+  // Recurse through child elements
+  foreach ($element as $key => &$child) {
+    if (is_array($child) && strpos($key, '#') !== 0) {
+      ut_events_add_warning_to_paragraphs($child);
+    }
+  }
+}
+
+/**
  * Implements hook_help().
  *
  * @inheritdoc
@@ -22,17 +89,8 @@ function ut_events_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.ut_events':
       $text = file_get_contents(dirname(__FILE__) . "/README.md");
-      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
-        return '<pre>' . $text . '</pre>';
-      }
-      else {
-        // Use the Markdown filter to render the README.
-        $filter_manager = \Drupal::service('plugin.manager.filter');
-        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
-        $config = ['settings' => $settings];
-        $filter = $filter_manager->createInstance('markdown', $config);
-        return $filter->process($text, 'en');
-      }
+      $converter = new \League\CommonMark\CommonMarkConverter();
+      return $converter->convert($text)->getContent();
   }
   return NULL;
 }
@@ -105,7 +163,7 @@ function ut_events_theme($existing, $type, $theme, $path) {
  *
  * Adds "Content Tips" helper text to the paragraph.
  */
-function ut_events_field_widget_paragraphs_form_alter(&$element, &$form_state, $context) {
+function ut_events_field_widget_single_element_paragraphs_form_alter(&$element, $form_state, $context) {
   if ($element['#paragraph_type'] == 'ut_events') {
     // Tips text.
     $markup = '<ul>';

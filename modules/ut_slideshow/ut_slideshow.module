@@ -22,17 +22,8 @@ function ut_slideshow_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.ut_slideshow':
       $text = file_get_contents(dirname(__FILE__) . "/README.md");
-      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
-        return '<pre>' . $text . '</pre>';
-      }
-      else {
-        // Use the Markdown filter to render the README.
-        $filter_manager = \Drupal::service('plugin.manager.filter');
-        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
-        $config = ['settings' => $settings];
-        $filter = $filter_manager->createInstance('markdown', $config);
-        return $filter->process($text, 'en');
-      }
+      $converter = new \League\CommonMark\CommonMarkConverter();
+      return $converter->convert($text)->getContent();
   }
   return NULL;
 }
@@ -70,7 +61,7 @@ function ut_slideshow_preprocess_paragraph__ut_slideshow(&$variables) {
  *
  * Adds "Content Tips" helper text to the paragraph.
  */
-function ut_slideshow_field_widget_paragraphs_form_alter(&$element, &$form_state, $context) {
+function ut_slideshow_field_widget_single_element_paragraphs_form_alter(&$element, $form_state, $context) {
   if ($element['#paragraph_type'] == 'ut_slideshow') {
     // Tips text.
     $markup = '<ul>';

@@ -14,6 +14,73 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\umd_terp_base\UmdTerpBase;
 
 /**
+ * Implements hook_form_alter().
+ */
+function ut_news_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Only process node edit forms
+  if (strpos($form_id, 'node_') === FALSE || strpos($form_id, 'edit_form') === FALSE) {
+    return;
+  }
+  
+  // Check if News API token is configured
+  $config = \Drupal::config('umd_terp_base.settings');
+  $token = $config->get('umd_terp_base.news_api_token');
+  
+  if (empty($token)) {
+    $form['#after_build'][] = 'ut_news_add_config_warning';
+  }
+}
+
+/**
+ * After build callback to add configuration warning to ut_news paragraphs.
+ */
+function ut_news_add_config_warning($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  ut_news_add_warning_to_paragraphs($form);
+  return $form;
+}
+
+/**
+ * Add warning message to ut_news paragraphs when API token is missing.
+ */
+function ut_news_add_warning_to_paragraphs(&$element) {
+  if (!is_array($element)) {
+    return;
+  }
+  
+  // Check if this element contains ut_news fields
+  $news_fields = [
+    'field_ut_news_title',
+    'field_ut_news_colleges_schools',
+    'field_ut_news_audience',
+    'field_ut_news_topics',
+    'field_ut_news_messaging_area'
+  ];
+  
+  $is_news_paragraph = FALSE;
+  foreach ($news_fields as $field_name) {
+    if (isset($element[$field_name])) {
+      $is_news_paragraph = TRUE;
+      break;
+    }
+  }
+  
+  if ($is_news_paragraph) {
+    $element['config_warning'] = [
+      '#type' => 'markup',
+      '#markup' => '<div class="messages messages--warning"><strong>Configuration Required:</strong> Please set the UMD News API Bearer token in the <a href="/admin/config/umd_terp_base/config" target="_blank">UMD Terp Base configuration</a>. Without this token, category dropdowns in this form will not populate with options and no news content will display on the frontend.</div>',
+      '#weight' => -100,
+    ];
+  }
+  
+  // Recurse through child elements
+  foreach ($element as $key => &$child) {
+    if (is_array($child) && strpos($key, '#') !== 0) {
+      ut_news_add_warning_to_paragraphs($child);
+    }
+  }
+}
+
+/**
  * Implements hook_help().
  *
  * @inheritdoc
@@ -22,17 +89,8 @@ function ut_news_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.ut_news':
       $text = file_get_contents(dirname(__FILE__) . "/README.md");
-      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
-        return '<pre>' . $text . '</pre>';
-      }
-      else {
-        // Use the Markdown filter to render the README.
-        $filter_manager = \Drupal::service('plugin.manager.filter');
-        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
-        $config = ['settings' => $settings];
-        $filter = $filter_manager->createInstance('markdown', $config);
-        return $filter->process($text, 'en');
-      }
+      $converter = new \League\CommonMark\CommonMarkConverter();
+      return $converter->convert($text)->getContent();
   }
   return NULL;
 }
@@ -107,7 +165,7 @@ function ut_news_theme($existing, $type, $theme, $path) {
  *
  * Adds "Content Tips" helper text to the paragraph.
  */
-function ut_news_field_widget_paragraphs_form_alter(&$element, &$form_state, $context) {
+function ut_news_field_widget_single_element_paragraphs_form_alter(&$element, $form_state, $context) {
   if ($element['#paragraph_type'] == 'ut_news') {
     // Tips text.
     $markup = '<ul>';

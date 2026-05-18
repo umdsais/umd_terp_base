@@ -61,6 +61,9 @@ class EventsCampusUnits extends ExternalDataSourceBase {
    */
   public function getResponse() {
     $data = UmdTerpBase::middleware_get_events_taxonomy('campusUnits');
+    if ($data === NULL) {
+      return [];
+    }
     return $this->formatResponse($data);
   }
 

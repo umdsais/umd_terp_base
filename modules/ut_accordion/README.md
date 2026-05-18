@@ -4,7 +4,7 @@ Paragraphs integration of accordions for UMD projects. This module provides a wa
 
 This module contains markup only (no js or css), those should be provided in the UMD Terp Theme:
 
-- [UMD Terp Theme](https://github.com/UMD-Digital/umd_terp)
+- [UMD Terp Theme](https://github.com/umdsais/umd_terp)
 
 ## Configuration
 
@@ -17,8 +17,18 @@ The following fields are available on the Accordion KS widget:
 
 The following fields are available on the Accordion Item KS widget:
 
-- Title: Defines if the first accordion item should be open by default.
+- Title: The clickable header for the accordion item.
 - Content: Paragraphs field that allows one to add Text, Blockquote, Divider, Button, Table, Webform or View.
+
+## URL Hash Linking
+
+Each accordion item is assigned a unique ID based on its paragraph ID (e.g. `accordion-item-123`). Linking directly to a URL hash will automatically open and scroll to the matching item:
+
+```
+https://example.com/page#accordion-item-123
+```
+
+This behavior is provided by the `umd_terp_base/element-hash-open` library and also responds to in-page `hashchange` events. See `umd_terp_base/js/element-hash-open.js` for implementation details.
 
 ## Markup Overrides
 

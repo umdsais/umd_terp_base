@@ -1,0 +1,10 @@
+umd_terp_base.settings:
+  type: config_object
+  label: 'UMD Terp Base Settings'
+  mapping:
+    umd_terp_base.news_api_token:
+      type: string
+      label: 'UMD Today News API Bearer Token'
+    umd_terp_base.calendar_api_token:
+      type: string
+      label: 'UMD Calendar API Bearer Token'

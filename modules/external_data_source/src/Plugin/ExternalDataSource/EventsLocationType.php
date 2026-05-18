@@ -61,6 +61,9 @@ class EventsLocationType extends ExternalDataSourceBase {
    */
   public function getResponse() {
     $data = UmdTerpBase::middleware_get_events_taxonomy('locationType');
+    if ($data === NULL) {
+      return [];
+    }
     return $this->formatResponse($data);
   }
 
