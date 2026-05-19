@@ -1,3 +1,8 @@
+11.1.1
+======
+- Added 120-character caption length tip to Carousel editor content tips.
+- Added 120-character text length tip to Slideshow editor content tips.
+
 11.1.0
 ======
 
