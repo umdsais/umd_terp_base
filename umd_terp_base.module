@@ -24,6 +24,11 @@ function umd_terp_base_preprocess_paragraph(&$variables) {
  * Adds help text directly to the summary textarea on article and event forms.
  */
 function umd_terp_base_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Add title accessibility guidance to all node forms.
+  if (isset($form['title']['widget'][0]['value'])) {
+    $form['title']['widget'][0]['value']['#description'] = t('Keep titles concise and descriptive. Short titles improve readability, navigation menus, and screen reader accessibility.');
+  }
+
   $summary_forms = [
     'node_umd_terp_article_form',
     'node_umd_terp_article_edit_form',

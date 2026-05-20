@@ -1,3 +1,7 @@
+11.1.3
+======
+- Added title field accessibility description to all node edit forms advising concise, descriptive titles for readability and screen reader compatibility.
+
 11.1.2
 ======
 - Added hero style, eyebrow, text, and CTA fields to basic page content type (`field_umdt_ct_page_hero_style`, `field_umdt_ct_hero_subtitle`, `field_umdt_ct_hero_text`, `field_umdt_ct_hero_cta`) with a collapsible "Hero Settings" field group in the edit form.
