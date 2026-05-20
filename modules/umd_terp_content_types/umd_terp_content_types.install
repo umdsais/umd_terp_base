@@ -5,6 +5,7 @@
  */
 
 use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * @file
@@ -172,4 +173,153 @@ function umd_terp_content_types_update_8008() {
   }
 
   return $messages;
+}
+
+/**
+ * Add hero fields to basic page content type.
+ *
+ * Creates a dedicated field_umdt_ct_page_hero_style selector and supporting
+ * fields (eyebrow, text, CTA) on umd_terp_basic_page, with a Hero Settings
+ * field group in the edit form. Safe to rerun.
+ */
+function umd_terp_content_types_update_8009() {
+
+  // 1. Create dedicated hero style field storage if not present.
+  if (!FieldStorageConfig::loadByName('node', 'field_umdt_ct_page_hero_style')) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_umdt_ct_page_hero_style',
+      'entity_type' => 'node',
+      'type' => 'list_string',
+      'settings' => [
+        'allowed_values' => [
+          'background' => 'Background',
+          'minimal' => 'Minimal',
+          'overlay' => 'Overlay',
+        ],
+        'allowed_values_function' => '',
+      ],
+      'cardinality' => 1,
+      'translatable' => TRUE,
+    ])->save();
+  }
+
+  // 2. Create field instances on basic page if not already present.
+  $field_definitions = [
+    'field_umdt_ct_page_hero_style' => [
+      'label' => 'Hero Style',
+      'description' => 'Choose the display style for the page hero area: <ul><li><a href="https://designsystem.umd.edu/components/minimal-hero" target="_blank">Minimal</a>, good for most interior pages.</li><li><a href="https://designsystem.umd.edu/components/background-hero" target="_blank">Background</a>, good for landing pages or specialty content.</li><li><a href="https://designsystem.umd.edu/components/overlay-hero" target="_blank">Overlay</a>, good for landing pages or specialty content.</li></ul>',
+      'default_value' => [['value' => 'minimal']],
+      'settings' => [],
+    ],
+    'field_umdt_ct_hero_subtitle' => [
+      'label' => 'Hero Subtitle',
+      'description' => 'Short eyebrow/label displayed above the hero headline. 20 characters or fewer is optimal; 40 characters maximum.',
+      'default_value' => [],
+      'settings' => [],
+    ],
+    'field_umdt_ct_hero_text' => [
+      'label' => 'Hero Text',
+      'description' => 'Optional supporting text shown below the headline.',
+      'default_value' => [],
+      'settings' => [],
+    ],
+    'field_umdt_ct_hero_cta' => [
+      'label' => 'Hero CTA',
+      'description' => 'Optional call-to-action link.',
+      'default_value' => [],
+      'settings' => ['link_type' => 17, 'title' => 2],
+    ],
+  ];
+
+  foreach ($field_definitions as $field_name => $config) {
+    if (!FieldConfig::loadByName('node', 'umd_terp_basic_page', $field_name)) {
+      FieldConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'bundle' => 'umd_terp_basic_page',
+        'label' => $config['label'],
+        'description' => $config['description'],
+        'required' => FALSE,
+        'default_value' => $config['default_value'],
+        'settings' => $config['settings'],
+      ])->save();
+    }
+  }
+
+  // 3. Add fields to form display and create Hero Settings group.
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+  $form_display = \Drupal::entityTypeManager()
+    ->getStorage('entity_form_display')
+    ->load('node.umd_terp_basic_page.default');
+
+  if ($form_display) {
+    $fields_to_add = [
+      'field_umdt_ct_page_hero_style' => [
+        'type' => 'options_select',
+        'weight' => 3,
+        'region' => 'content',
+        'settings' => [],
+        'third_party_settings' => [],
+      ],
+      'field_umdt_ct_hero_subtitle' => [
+        'type' => 'string_textfield',
+        'weight' => 5,
+        'region' => 'content',
+        'settings' => ['size' => 60, 'placeholder' => ''],
+        'third_party_settings' => [],
+      ],
+      'field_umdt_ct_hero_text' => [
+        'type' => 'string_textarea',
+        'weight' => 6,
+        'region' => 'content',
+        'settings' => ['rows' => 3, 'placeholder' => ''],
+        'third_party_settings' => [],
+      ],
+      'field_umdt_ct_hero_cta' => [
+        'type' => 'link_default',
+        'weight' => 7,
+        'region' => 'content',
+        'settings' => ['placeholder_url' => '', 'placeholder_title' => ''],
+        'third_party_settings' => [],
+      ],
+    ];
+    foreach ($fields_to_add as $field_name => $component) {
+      if (!$form_display->getComponent($field_name)) {
+        $form_display->setComponent($field_name, $component);
+      }
+    }
+
+    // Create Hero Settings field group if field_group module is present.
+    $third_party = $form_display->get('third_party_settings') ?? [];
+    if (isset($third_party['field_group']) && !isset($third_party['field_group']['group_hero'])) {
+      if (isset($third_party['field_group']['group_general']['children'])) {
+        $third_party['field_group']['group_general']['children'] = array_values(
+          array_diff($third_party['field_group']['group_general']['children'], ['field_umdt_ct_hero_image'])
+        );
+      }
+      $third_party['field_group']['group_hero'] = [
+        'children' => [
+          'field_umdt_ct_page_hero_style',
+          'field_umdt_ct_hero_image',
+          'field_umdt_ct_hero_subtitle',
+          'field_umdt_ct_hero_text',
+          'field_umdt_ct_hero_cta',
+        ],
+        'parent_name' => '',
+        'weight' => 1,
+        'format_type' => 'details',
+        'format_settings' => [
+          'label' => 'Hero Settings',
+          'open' => FALSE,
+          'required_fields' => TRUE,
+          'id' => '',
+          'classes' => '',
+        ],
+        'label' => 'Hero Settings',
+      ];
+      $form_display->set('third_party_settings', $third_party);
+    }
+
+    $form_display->save();
+  }
 }

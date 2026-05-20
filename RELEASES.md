@@ -1,7 +1,13 @@
+11.1.2
+======
+- Added hero style, eyebrow, text, and CTA fields to basic page content type (`field_umdt_ct_page_hero_style`, `field_umdt_ct_hero_subtitle`, `field_umdt_ct_hero_text`, `field_umdt_ct_hero_cta`) with a collapsible "Hero Settings" field group in the edit form.
+
+### Update Hooks
+- `umd_terp_content_types_update_8009`: Creates `field_umdt_ct_page_hero_style` (list_string) field storage and instances of all four hero fields on `umd_terp_basic_page`; adds fields to the default form display and creates a "Hero Settings" `field_group` details group.
+
 11.1.1
 ======
-- Added 120-character caption length tip to Carousel editor content tips.
-- Added 120-character text length tip to Slideshow editor content tips.
+- Updated character limit tips in Carousel (120 → 96 characters) and Slideshow (120 → 96 characters) editor hints.
 
 11.1.0
 ======

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_umdt_ct_page_hero_style
+    - node.type.umd_terp_basic_page
+  module:
+    - options
+id: node.umd_terp_basic_page.field_umdt_ct_page_hero_style
+field_name: field_umdt_ct_page_hero_style
+entity_type: node
+bundle: umd_terp_basic_page
+label: 'Hero Style'
+description: "Choose the display style for the page hero area: \r\n<ul>\r\n<li><a href=\"https://designsystem.umd.edu/components/minimal-hero\" target=\"_blank\">Minimal</a>, good for most interior pages.</li>\r\n<li><a href=\"https://designsystem.umd.edu/components/background-hero\" target=\"_blank\">Background</a>, good for landing pages or specialty content.</li>\r\n<li><a href=\"https://designsystem.umd.edu/components/overlay-hero\" target=\"_blank\">Overlay</a>, good for landing pages or specialty content.</li>\r\n</ul>\r\n"
+required: false
+translatable: false
+default_value:
+  -
+    value: minimal
+default_value_callback: ''
+settings: {  }
+field_type: list_string

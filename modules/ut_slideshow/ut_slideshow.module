@@ -67,7 +67,7 @@ function ut_slideshow_field_widget_single_element_paragraphs_form_alter(&$elemen
     $markup = '<ul>';
     $markup .= '<li><strong>Use at least three images.</strong> If you only have one or two images, consider using a different widget.</li>';
     $markup .= '<li><strong>Use plain text.</strong> The Caption, Title, and Text should not have styles (bold, italics, etc.).</li>';
-    $markup .= '<li><strong>Keep text short.</strong> Caption, Title, and Text should each be 120 characters or less for best display results.</li>';
+    $markup .= '<li><strong>Keep text short.</strong> Caption, Title, and Text should each be 96 characters or less for best display results.</li>';
     $markup .= '<li><a target="_blank" href="/admin/help/ut_slideshow">Slideshow Help</a></li>';
     $markup .= '</ul>';
     $element['ut_slideshow_tips'] = [
