@@ -17,7 +17,7 @@
 						<umd-element-accordion-item id="accordion-item-{{ item['#paragraph'].id() }}" data-visual-open="{{ expanded ? 'true' : 'false' }}" resize="" data-theme="light">
 							<p slot="headline">{{ item['#paragraph'].field_ut_accordion_item_title.value }}</p>
 							<div slot="text" class="editor-content">
-								{% include directory ~ '/templates/helpers/paragraph-content.html.twig' with { 'item': item, 'content': item['#paragraph'].field_ut_accordion_item_content } %}
+								{% include [directory ~ '/templates/helpers/paragraph-content.html.twig', '@umd_terp/helpers/paragraph-content.html.twig'] with { 'item': item, 'content': item['#paragraph'].field_ut_accordion_item_content } %}
 							</div>
 						</umd-element-accordion-item>
 						{% set _loop_index = _loop_index + 1 %}

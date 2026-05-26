@@ -1,3 +1,7 @@
+11.1.4
+======
+- Updated `paragraph--ut-accordion.html.twig`, `paragraph--ut-tabs.html.twig`, and `paragraph--ut-news.html.twig` to use Twig array include syntax with `@umd_terp` namespace fallback, enabling subtheme compatibility for helper partial templates.
+
 11.1.3
 ======
 - Added title field accessibility description to all node edit forms advising concise, descriptive titles for readability and screen reader compatibility.

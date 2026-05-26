@@ -53,7 +53,7 @@
       {% endif %}
       <div class="text-center mt-4">
         {% if content.field_ut_news_link.0 %}
-          {% include directory ~ '/templates/helpers/link.html.twig' with {'link': content.field_ut_news_link.0, 'classes': 'card-group-cta fancy-link' } %}
+          {% include [directory ~ '/templates/helpers/link.html.twig', '@umd_terp/helpers/link.html.twig'] with {'link': content.field_ut_news_link.0, 'classes': 'card-group-cta fancy-link' } %}
         {% endif %}
       </div>
     {% endblock %}

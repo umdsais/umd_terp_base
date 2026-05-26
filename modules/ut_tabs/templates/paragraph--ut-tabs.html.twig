@@ -14,7 +14,7 @@
 					{% for key, item in content.field_ut_tabs_items %}
 						{% if key|first != '#' %}
 							<div data-title="{{ item['#paragraph'].field_ut_tabs_item_title.value }}">
-								{% include directory ~ '/templates/helpers/paragraph-content.html.twig' with { 'item': item, 'content': item['#paragraph'].field_ut_tabs_item_content } %}
+								{% include [directory ~ '/templates/helpers/paragraph-content.html.twig', '@umd_terp/helpers/paragraph-content.html.twig'] with { 'item': item, 'content': item['#paragraph'].field_ut_tabs_item_content } %}
 							</div>
 						{% endif %}
 					{% endfor %}
