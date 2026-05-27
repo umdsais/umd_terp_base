@@ -20,10 +20,10 @@
 		{% if content.field_ut_card_link.0 %}
 		{% set target = link['#url'].getOption('attributes')['target'] ?? '_self' %}
 			<a slot="image" href="{{ link['#url'] }}" target="{{ target }}">
-				<img src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('optimized')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}"/>
+				<img src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('UMDDL_card_teaser')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}" width="{{ content.field_ut_card_image[0]['#media'].field_media_image.width }}" height="{{ content.field_ut_card_image[0]['#media'].field_media_image.height }}" loading="lazy" decoding="async"/>
 			</a>
 		{% else %}
-			<img slot="image" src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('optimized')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}"/>
+			<img slot="image" src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('UMDDL_card_teaser')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}" width="{{ content.field_ut_card_image[0]['#media'].field_media_image.width }}" height="{{ content.field_ut_card_image[0]['#media'].field_media_image.height }}" loading="lazy" decoding="async"/>
 		{% endif %}
 	{% endif %}
 	{% if content.field_ut_card_title|field_value %}

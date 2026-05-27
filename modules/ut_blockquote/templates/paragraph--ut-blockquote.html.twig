@@ -13,7 +13,7 @@
 			<umd-element-quote theme="{{ brightness }}" size="">
 
 				{% if content.field_ut_blockquote_image|field_value %}
-					<img slot="image" src="{{ file_url(content.field_ut_blockquote_image[0]['#media'].field_media_image.entity.uri.value | image_style('optimized')) }}" alt="{{ content.field_ut_blockquote_image[0]['#media'].field_media_image.alt }}"/>
+					<img slot="image" src="{{ file_url(content.field_ut_blockquote_image[0]['#media'].field_media_image.entity.uri.value | image_style('UMDDL_blockquote')) }}" alt="{{ content.field_ut_blockquote_image[0]['#media'].field_media_image.alt }}" width="{{ content.field_ut_blockquote_image[0]['#media'].field_media_image.width }}" height="{{ content.field_ut_blockquote_image[0]['#media'].field_media_image.height }}" loading="lazy" decoding="async"/>
 				{% endif %}
 
 				<p slot="quote">

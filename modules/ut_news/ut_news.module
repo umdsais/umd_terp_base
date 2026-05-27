@@ -217,7 +217,7 @@ function _ut_news_get_news(
     return $cache->data;
   }
   else {
-    $fields = '{ title url postDate ... on articles_today_Entry { summary: genericText articlesHeroImage { url ... on hero_Asset { altText: genericText }}}}';
+    $fields = '{ title url postDate ... on articles_today_Entry { summary: genericText articlesHeroImage { url width height ... on hero_Asset { altText: genericText }}}}';
     $query = 'getArticlesByCategory{entries(section:\\"articles\\",limit:' . $range . ',';
     if ($colleges_schools !== NULL || $audience !== NULL || $topic !== NULL || $messaging_area !== NULL || $priorities !== NULL) {
       if (isset($colleges_schools)) {

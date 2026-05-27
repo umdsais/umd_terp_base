@@ -1,3 +1,11 @@
+11.1.6
+======
+- Update hook 8009 creates all UMDDL-prefixed image styles and sets backend display formatters for all relevant paragraph bundles.
+- Paragraph templates and backend config are now fully aligned to use the new image styles.
+- All code and config changes are present and synced in both the repo and Lando webroot.
+- Legacy `optimized` image style references were removed from the updated paragraph template set in this release pass.
+- Caches rebuilt and validated after changes.
+
 11.1.5
 ======
 - `ut_feature`: Replaced `maryland` theme option with `light` (Light Gray overlay). Update hook `8005` migrates any existing `maryland` values to `white` and updates the field's allowed values.

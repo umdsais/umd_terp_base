@@ -23,7 +23,7 @@
           {% for evnt in ut_events_list %}
 
             <umd-element-event show-time="false" display="">
-              <img slot="image" src="{{ evnt.image[0].url }}" alt="{{ evnt.image[0].altText }}"/>
+              <img slot="image" src="{{ evnt.image[0].url }}" alt="{{ evnt.image[0].altText }}" width="{{ evnt.image[0].width|default(16) }}" height="{{ evnt.image[0].height|default(9) }}" loading="lazy" decoding="async"/>
 
               <h2 slot="headline">{{ evnt.title|raw }}</h2>
 

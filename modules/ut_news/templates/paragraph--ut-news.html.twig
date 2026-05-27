@@ -28,7 +28,7 @@
                 {% endif %}
                 {% set photo_alt = news.articlesHeroImage.0.altText %}
                 <a slot="image" href="{{ news.url }}" target="_blank">
-                  <img src="{{ photo }}" alt="{{ photo_alt }}"/>
+                  <img src="{{ photo }}" alt="{{ photo_alt }}" width="{{ news.articlesHeroImage.0.width|default(16) }}" height="{{ news.articlesHeroImage.0.height|default(9) }}" loading="lazy" decoding="async"/>
                 </a>
               {% endif %}
               <div slot="eyebrow">{{ news.postDate|date("F j, Y") }}</div>

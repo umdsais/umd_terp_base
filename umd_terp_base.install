@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Install, update and uninstall functions for the UMD Terp Base module.
@@ -196,5 +195,86 @@ function umd_terp_base_update_8008() {
       'label' => 'Header Utility Menu',
       'description' => 'Links displayed in the site header utility navigation and mobile slide-out panel.',
     ])->save();
+  }
+}
+
+/** Create UMDDL-prefixed image styles for components. */
+function umd_terp_base_update_8009() {
+  $styles = [
+    // Card/teaser: 416px wide, scale, no crop.
+    'UMDDL_card_teaser' => [
+      ['id' => 'image_scale', 'data' => ['width' => 416, 'height' => NULL, 'upscale' => FALSE]],
+      ['id' => 'image_convert', 'data' => ['extension' => 'jpg', 'quality' => 80, 'strip_profiles' => TRUE, 'interlace' => TRUE]],
+    ],
+    // Feature: 832px wide, scale, no crop.
+    'UMDDL_feature' => [
+      ['id' => 'image_scale', 'data' => ['width' => 832, 'height' => NULL, 'upscale' => FALSE]],
+      ['id' => 'image_convert', 'data' => ['extension' => 'jpg', 'quality' => 80, 'strip_profiles' => TRUE, 'interlace' => TRUE]],
+    ],
+    // Blockquote: 416px wide, scale, no crop.
+    'UMDDL_blockquote' => [
+      ['id' => 'image_scale', 'data' => ['width' => 416, 'height' => NULL, 'upscale' => FALSE]],
+      ['id' => 'image_convert', 'data' => ['extension' => 'jpg', 'quality' => 80, 'strip_profiles' => TRUE, 'interlace' => TRUE]],
+    ],
+    // Image: 1200px wide, scale, no crop.
+    'UMDDL_image' => [
+      ['id' => 'image_scale', 'data' => ['width' => 1200, 'height' => NULL, 'upscale' => FALSE]],
+      ['id' => 'image_convert', 'data' => ['extension' => 'jpg', 'quality' => 80, 'strip_profiles' => TRUE, 'interlace' => TRUE]],
+    ],
+    // Carousel: 832px wide, scale, no crop.
+    'UMDDL_carousel' => [
+      ['id' => 'image_scale', 'data' => ['width' => 832, 'height' => NULL, 'upscale' => FALSE]],
+      ['id' => 'image_convert', 'data' => ['extension' => 'jpg', 'quality' => 80, 'strip_profiles' => TRUE, 'interlace' => TRUE]],
+    ],
+    // Slideshow: 1200px wide, scale, no crop.
+    'UMDDL_slideshow' => [
+      ['id' => 'image_scale', 'data' => ['width' => 1200, 'height' => NULL, 'upscale' => FALSE]],
+      ['id' => 'image_convert', 'data' => ['extension' => 'jpg', 'quality' => 80, 'strip_profiles' => TRUE, 'interlace' => TRUE]],
+    ],
+  ];
+
+  $storage = \Drupal::entityTypeManager()->getStorage('image_style');
+  foreach ($styles as $name => $effects) {
+    if ($storage->load($name)) {
+      continue;
+    }
+    $style = $storage->create([
+      'name' => $name,
+      'label' => $name,
+      'effects' => [],
+    ]);
+    $style->save();
+    foreach ($effects as $weight => $effect) {
+      $style->addImageEffect([
+        'id' => $effect['id'],
+        'weight' => $weight,
+        'data' => $effect['data'],
+      ]);
+    }
+    $style->save();
+  }
+
+  // Set the image field display formatter for each paragraph bundle to use the new style.
+  $paragraphs = [
+    // bundle => [field, style]
+    'ut_card' => ['field_ut_card_image', 'UMDDL_card_teaser'],
+    'ut_feature' => ['field_ut_feature_image', 'UMDDL_feature'],
+    'ut_blockquote' => ['field_ut_blockquote_image', 'UMDDL_blockquote'],
+    'ut_image' => ['field_ut_image_image', 'UMDDL_image'],
+    'ut_carousel_item' => ['field_ut_carousel_item_image', 'UMDDL_carousel'],
+    'ut_slideshow_item' => ['field_ut_slideshow_item_image', 'UMDDL_slideshow'],
+    'ut_image_with_text' => ['field_ut_image_with_text_image', 'UMDDL_image'],
+  ];
+  foreach ($paragraphs as $bundle => [$field, $style]) {
+    $view_display = \Drupal::entityTypeManager()
+      ->getStorage('entity_view_display')
+      ->load("paragraph.$bundle.default");
+    if ($view_display) {
+      $component = $view_display->getComponent($field);
+      if ($component && isset($component['type']) && $component['type'] === 'image') {
+        $component['settings']['image_style'] = $style;
+        $view_display->setComponent($field, $component)->save();
+      }
+    }
   }
 }

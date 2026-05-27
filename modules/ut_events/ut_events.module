@@ -215,7 +215,7 @@ function _ut_events_get_events(
     return $cache->data;
   }
   else {
-    $fields = 'id title slug url allDay multiDay startDate endDate ... on communications_Event { id summary: commonRichTextTwo description: commonRichText image: commonAssetHeroImageSingle { url } } ... on submission_Event { id summary: commonRichTextTwo description: commonRichText image: commonAssetHeroImageSingle { url ... on placeholders_Asset { id altText:alt } ... on heroImages_Asset { id altText:commonPlainTextTwo }}}';
+    $fields = 'id title slug url allDay multiDay startDate endDate ... on communications_Event { id summary: commonRichTextTwo description: commonRichText image: commonAssetHeroImageSingle { url width height } } ... on submission_Event { id summary: commonRichTextTwo description: commonRichText image: commonAssetHeroImageSingle { url width height ... on placeholders_Asset { id altText:alt } ... on heroImages_Asset { id altText:commonPlainTextTwo }}}';
     $query = 'getEvents{solspace_calendar{events(limit:' . $range . ',loadOccurrences: true,rangeStart:\\"today\\"';
     if ($location_type !== NULL || $campus_location !== NULL || $campus_unit !== NULL || $tags !== NULL) {
       $taxonomies = [];
