@@ -6,11 +6,14 @@
 #}
 
 {% set position = paragraph.field_ut_feature_reverse.value ? 'right' : 'left' %}
+{% set theme = paragraph.field_ut_feature_theme.value ? paragraph.field_ut_feature_theme.value : 'white' %}
+{% set display = (theme == 'dark' or theme == 'light') ? 'overlay' : '' %}
+{% set cta_display = (theme == 'dark' or theme == 'light') ? 'primary' : 'secondary' %}
 
 {% block paragraph %}
 	<div{{attributes.setAttribute('id','umd_terp_paragraph--'~paragraph.id())}}>
 		{% block content %}
-		<umd-element-pathway data-theme="" data-display="" data-layout-image-position="{{ position }}" data-layout-image-scaled="true" data-visual-time="true">
+		<umd-element-pathway data-theme="{{ theme }}" data-display="{{ display }}" data-layout-image-position="{{ position }}" data-layout-image-scaled="true" data-visual-time="true">
 				<img slot="image" src="{{ file_url(content.field_ut_feature_image[0]['#media'].field_media_image.entity.uri.value | image_style('optimized')) }}" alt="{{ content.field_ut_feature_image[0]['#media'].field_media_image.alt }}"/>
 
 				{% if content.field_ut_feature_title|field_value %}
@@ -24,13 +27,11 @@
 				{% if content.field_ut_feature_link.0 %}
 					{% set link = content.field_ut_feature_link.0 %}
 					{% set target = link['#url'].getOption('attributes')['target'] ?? '_self' %}
-					<div slot="actions">
-						<umd-element-call-to-action slot="actions" data-display="secondary" data-visual-size="" data-theme="white">
-							<a href="{{ link['#url'] }}" target="{{ target }}">
-								{{ link['#title'] }}
-							</a>
-						</umd-element-call-to-action>
-					</div>
+					<umd-element-call-to-action slot="actions" data-display="{{ cta_display }}">
+						<a href="{{ link['#url'] }}" target="{{ target }}">
+							{{ link['#title'] }}
+						</a>
+					</umd-element-call-to-action>
 				{% endif %}
 			</umd-element-pathway>
 

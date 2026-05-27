@@ -1,3 +1,10 @@
+11.1.5
+======
+- `ut_feature`: Replaced `maryland` theme option with `light` (Light Gray overlay). Update hook `8005` migrates any existing `maryland` values to `white` and updates the field's allowed values.
+- `ut_images`: Replaced `umd-text-rich-advanced` class with `editor-content` in `paragraph--ut-image-with-text.html.twig` to prevent web-styles-library from overriding paragraph text color to grey (`#454545`).
+- `ut_stats`: Changed `slot="stat"` wrapper from `<div>` to `<p>` in `paragraph--ut-stat.html.twig` to satisfy `umd-element-stat` slot validation (`div` is not an allowed element).
+- `element-hash-open`: Fixed `once is not a function` error by removing `once` from the `attach()` parameter list; `once` is a Drupal global and must not be declared as a parameter.
+
 11.1.4
 ======
 - Updated `paragraph--ut-accordion.html.twig`, `paragraph--ut-tabs.html.twig`, and `paragraph--ut-news.html.twig` to use Twig array include syntax with `@umd_terp` namespace fallback, enabling subtheme compatibility for helper partial templates.

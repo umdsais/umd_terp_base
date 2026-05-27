@@ -9,6 +9,7 @@ dependencies:
     - field.field.paragraph.ut_feature.field_ut_feature_style
     - field.field.paragraph.ut_feature.field_ut_feature_text
     - field.field.paragraph.ut_feature.field_ut_feature_title
+    - field.field.paragraph.ut_feature.field_ut_feature_theme
     - paragraphs.paragraphs_type.ut_feature
   module:
     - link
@@ -81,4 +82,5 @@ content:
     type: string
     region: content
 hidden:
+  field_ut_feature_theme: true
   search_api_excerpt: true

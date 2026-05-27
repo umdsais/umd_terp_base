@@ -30,7 +30,7 @@
   }
 
   Drupal.behaviors.umdElementHashOpen = {
-    attach(context, settings, once) {
+    attach(context, settings) {
       once('umd-element-hash-open', 'html', context).forEach(() => {
         openElementFromHash();
         window.addEventListener('hashchange', openElementFromHash);

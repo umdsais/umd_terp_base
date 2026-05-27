@@ -50,8 +50,9 @@ function ut_feature_field_widget_single_element_paragraphs_form_alter(&$element,
   if ($element['#paragraph_type'] == 'ut_feature') {
     // Tips text.
     $markup = '<ul>';
-    $markup .= '<li><strong>These work best as a grid.</strong> Use 2-3 stacked.</li>';
-    $markup .= '<li><strong>Reverse every other feature.</strong> This will make a more flowing grid.</li>';
+    $markup .= '<li><strong>These work best as a series.</strong> Use 2-3 stacked features together.</li>';
+    $markup .= '<li><strong>Reverse every other feature</strong> for a more dynamic layout.</li>';
+    $markup .= '<li><strong>Theme options:</strong> White (default), Light Gray (overlay), or Dark (overlay).</li>';
     $markup .= '<li><a target="_blank" href="/admin/help/ut_feature">Feature Module Help</a></li>';
     $markup .= '</ul>';
     $element['ut_feature_tips'] = [

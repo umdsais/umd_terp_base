@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_ut_feature_theme
+field_name: field_ut_feature_theme
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: white
+      label: 'White (default)'
+    -
+      value: light
+      label: 'Light Gray'
+    -
+      value: dark
+      label: Dark
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: false

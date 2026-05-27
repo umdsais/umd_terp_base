@@ -92,6 +92,84 @@ function ut_feature_update_8001() {
 }
 
 /**
+ * Add field_ut_feature_theme (White/Light Gray/Dark) to ut_feature paragraph.
+ */
+function ut_feature_update_8004() {
+  $entity_type_manager = \Drupal::entityTypeManager();
+
+  // Create field storage if it doesn't exist.
+  if (!FieldStorageConfig::loadByName('paragraph', 'field_ut_feature_theme')) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_ut_feature_theme',
+      'entity_type' => 'paragraph',
+      'type' => 'list_string',
+      'cardinality' => 1,
+      'translatable' => FALSE,
+      'settings' => [
+        'allowed_values' => [
+          'white' => 'White (default)',
+          'light' => 'Light Gray',
+          'dark'  => 'Dark',
+        ],
+      ],
+    ])->save();
+  }
+
+  // Create field instance if it doesn't exist.
+  if (!FieldConfig::loadByName('paragraph', 'ut_feature', 'field_ut_feature_theme')) {
+    FieldConfig::create([
+      'field_name' => 'field_ut_feature_theme',
+      'entity_type' => 'paragraph',
+      'bundle' => 'ut_feature',
+      'label' => 'Theme',
+      'description' => 'Sets the background/color theme of the feature element.',
+      'required' => FALSE,
+      'default_value' => [['value' => 'white']],
+    ])->save();
+  }
+
+  // Add field to the default form display.
+  $form_display = $entity_type_manager
+    ->getStorage('entity_form_display')
+    ->load('paragraph.ut_feature.default');
+  if ($form_display && !$form_display->getComponent('field_ut_feature_theme')) {
+    $form_display->setComponent('field_ut_feature_theme', [
+      'type' => 'options_select',
+      'weight' => 1,
+      'region' => 'content',
+      'settings' => [],
+      'third_party_settings' => [],
+    ])->save();
+  }
+}
+
+/**
+ * Update field_ut_feature_theme allowed values: replace maryland with light.
+ */
+function ut_feature_update_8005() {
+  $field_storage = \Drupal\field\Entity\FieldStorageConfig::loadByName('paragraph', 'field_ut_feature_theme');
+  if ($field_storage) {
+    $field_storage->setSetting('allowed_values', [
+      'white' => 'White (default)',
+      'light' => 'Light Gray',
+      'dark'  => 'Dark',
+    ]);
+    $field_storage->save();
+  }
+
+  // Migrate any existing 'maryland' values to 'white'.
+  $database = \Drupal::database();
+  foreach (['paragraph__field_ut_feature_theme', 'paragraph_revision__field_ut_feature_theme'] as $table) {
+    if ($database->schema()->tableExists($table)) {
+      $database->update($table)
+        ->fields(['field_ut_feature_theme_value' => 'white'])
+        ->condition('field_ut_feature_theme_value', 'maryland')
+        ->execute();
+    }
+  }
+}
+
+/**
  * Remove required on style and color fields.
  */
 function ut_feature_update_8002() {
