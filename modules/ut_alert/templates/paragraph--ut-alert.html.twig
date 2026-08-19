@@ -7,11 +7,7 @@
 
 <umd-element-alert-page data-visual-icon="true">
 	{% if content.field_ut_alert_title|field_value %}
-		<h2 slot="headline">
-			<a href="/" aria-label="Learn more about {{ content.field_ut_alert_title }}">
-				{{ content.field_ut_alert_title }}
-			</a>
-		</h2>
+		<h2 slot="headline">{{ content.field_ut_alert_title }}</h2>
 	{% endif %}
 	{% if content.field_ut_alert_text|field_value %}
 		<div slot="text" class="editor-content">
