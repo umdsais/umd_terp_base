@@ -18,3 +18,11 @@ function ut_card_update_8001() {
 function ut_card_update_8002() {
   \Drupal::service('config.installer')->installDefaultConfig('module', 'ut_card');
 }
+
+/**
+ * Add column-specific image styles for Card Groups.
+ */
+function ut_card_update_8003() {
+  \Drupal::service('config.installer')
+    ->installDefaultConfig('module', 'ut_card');
+}

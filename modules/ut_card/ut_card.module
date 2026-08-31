@@ -52,9 +52,47 @@ function ut_card_theme($existing, $type, $theme, $path) {
  *
  * This preproccess gets the column numbers of parent group.
  */
-function ut_card_preprocess_paragraph__ut_card(&$variables) {
-  $variables['ut_card_brightness'] = $variables['elements']['#paragraph']->getParentEntity()->field_ut_card_group_style->value;
+/**
+ * This checks what Card Column number is selected.
+ * If 2 columns are selected, then the 2 column image style is used
+ * If 3 or 4 columns are selected, then the 3 column image style is used
+ * this is to resolve an issue where when only a single image style that had been made for 3 columns was used, 2 column images were being upscaled and losing quality
+ */
+function ut_card_preprocess_paragraph__ut_card(array &$variables) {
+
+  $card = $variables['elements']['#paragraph'];
+  $group = $card->getParentEntity();
+
+  $variables['ut_card_image_style'] =
+    'umd_terp_card_3_column';
+
+  if (
+    $group &&
+    $group->hasField('field_ut_card_group_style') &&
+    !$group->get('field_ut_card_group_style')->isEmpty()
+  ) {
+    $variables['ut_card_brightness'] =
+      $group->get('field_ut_card_group_style')->value;
+  }
+
+  if (
+    $group &&
+    $group->hasField('field_ut_card_group_columns') &&
+    !$group->get('field_ut_card_group_columns')->isEmpty()
+  ) {
+
+    $columns =
+      $group->get('field_ut_card_group_columns')->value;
+
+    if ($columns === '2') {
+      $variables['ut_card_image_style'] =
+        'umd_terp_card_2_column';
+    }
+  }
+
 }
+
+
 
 /**
  * Implements hook_field_WIDGET_TYPE_paragraphs_form_alter().

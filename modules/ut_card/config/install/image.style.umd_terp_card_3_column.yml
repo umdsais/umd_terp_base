@@ -1,0 +1,22 @@
+uuid: 6303a584-02e2-4502-93ca-62cdd3d18791
+langcode: en
+status: true
+dependencies: {  }
+name: umd_terp_card_3_column
+label: umd_terp_card_3_column
+effects:
+  f8aef230-ff1e-4684-a049-7fb73329248b:
+    uuid: f8aef230-ff1e-4684-a049-7fb73329248b
+    id: image_scale
+    weight: 1
+    data:
+      width: 416
+      height: null
+      upscale: false
+  b178c844-5f79-4c07-ba32-69756638ce97:
+    uuid: b178c844-5f79-4c07-ba32-69756638ce97
+    id: image_convert
+    weight: 2
+    data:
+      extension: jpg
+pipeline: __default__
