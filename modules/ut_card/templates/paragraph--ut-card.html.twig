@@ -15,18 +15,17 @@
 		{% set link = content.field_ut_card_link.0 %}
 {% endif %}	
 
+
 <umd-element-card data-theme="{{ brightness }}" border="false" aligned="false">
 	{% if content.field_ut_card_image|field_value %}
-		{% set card_image_style =
-  			ut_card_image_style|default('umd_terp_card_3_column')
-		%}
+		{% set card_image_style = ut_card_image_style|default('umd_terp_card_3_column') %}
 		{% if content.field_ut_card_link.0 %}
 		{% set target = link['#url'].getOption('attributes')['target'] ?? '_self' %}
 			<a slot="image" href="{{ link['#url'] }}" target="{{ target }}">
-				<img src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('card_image_style')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}" width="{{ content.field_ut_card_image[0]['#media'].field_media_image.width }}" height="{{ content.field_ut_card_image[0]['#media'].field_media_image.height }}" loading="lazy" decoding="async"/>
+				<img src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style(card_image_style)) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}" width="{{ content.field_ut_card_image[0]['#media'].field_media_image.width }}" height="{{ content.field_ut_card_image[0]['#media'].field_media_image.height }}" loading="lazy" decoding="async"/>
 			</a>
 		{% else %}
-			<img slot="image" src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style('UMDDL_card_teaser')) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}" width="{{ content.field_ut_card_image[0]['#media'].field_media_image.width }}" height="{{ content.field_ut_card_image[0]['#media'].field_media_image.height }}" loading="lazy" decoding="async"/>
+			<img slot="image" src="{{ file_url(content.field_ut_card_image[0]['#media'].field_media_image.entity.uri.value | image_style(card_image_style)) }}" alt="{{ content.field_ut_card_image[0]['#media'].field_media_image.alt }}" width="{{ content.field_ut_card_image[0]['#media'].field_media_image.width }}" height="{{ content.field_ut_card_image[0]['#media'].field_media_image.height }}" loading="lazy" decoding="async"/>
 		{% endif %}
 	{% endif %}
 	{% if content.field_ut_card_title|field_value %}
